@@ -20,6 +20,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install Acton
+        run: |
+          curl -LsSf https://github.com/ton-blockchain/acton/releases/latest/download/acton-installer.sh | sh
+          echo "$HOME/.acton/bin" >> "$GITHUB_PATH"
+      - name: Compile Jetton deployment artifact
+        working-directory: contracts/empirecoin
+        run: |
+          acton build
+          cp build/JettonMinter.json ../../public/empirecoin-minter-code.json
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
