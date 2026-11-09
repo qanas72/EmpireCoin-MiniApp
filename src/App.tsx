@@ -26,6 +26,7 @@ function App() {
   const wallet = useTonWallet()
   const [telegramStatus, setTelegramStatus] = useState<'checking' | 'verified' | 'unavailable' | 'error'>('checking')
   const [telegramUser, setTelegramUser] = useState<{ id: number; username: string | null; firstName: string | null } | null>(null)
+  const [telegramError, setTelegramError] = useState('')
   const [adminData, setAdminData] = useState<any>(null)
   const [adminStatus, setAdminStatus] = useState<'checking' | 'ready' | 'denied' | 'error'>('checking')
   const [adminSaving, setAdminSaving] = useState(false)
@@ -64,7 +65,7 @@ function App() {
           } catch { setAdminStatus('error') }
         }
       })
-      .catch(() => { if (!cancelled) setTelegramStatus('error') })
+      .catch((err) => { if (!cancelled) { setTelegramError(err instanceof Error ? err.message : 'Telegram verification failed'); setTelegramStatus('error') } })
     return () => { cancelled = true }
   }, [])
   const walletAddress = wallet?.account.address
@@ -137,7 +138,7 @@ function App() {
         {section === 'tasks' && <div className="feature-panel"><span className="feature-icon">▤</span><span className="eyebrow">EMPIRE MARKETPLACE</span><h2>Tasks & campaigns</h2><p>Discover community campaigns, complete verified tasks, or create your own promotion.</p><div className="notice">Task rewards and campaign payments are not active yet. They will be enabled after backend and anti-fraud checks are ready.</div><button className="gold-button" disabled>Coming soon</button></div>}
         {section === 'referrals' && <div className="feature-panel"><span className="feature-icon">♧</span><span className="eyebrow">GROW THE EMPIRE</span><h2>Invite & earn</h2><p>Your personal invitation link and referral history will appear here.</p><div className="notice">Referral rewards will only be credited after membership and wallet verification are confirmed by the server.</div><button className="gold-button" disabled>Referral link coming soon</button></div>}
         {section === 'wallet' && <div className="feature-panel"><span className="feature-icon">◇</span><span className="eyebrow">TON CONNECT</span><h2>Connect your wallet</h2><p>Use your own TON-compatible wallet. EmpireCoin will never ask for your seed phrase or private key.</p><div className="notice">Connect your own TON wallet securely. The app never receives your seed phrase or private key. Connecting a wallet does not deposit funds or activate paid features.</div><TonConnectButton />{wallet && <p className="wallet-address">Connected: {shortAddress}</p>}</div>}
-        {section === 'profile' && <div className="feature-panel"><span className="feature-icon">◉</span><span className="eyebrow">MEMBER AREA</span><h2>Your Empire ID</h2><p>Your verified Telegram profile, membership status, and account activity will appear here.</p><div className="notice">{telegramStatus === 'verified' && telegramUser ? `Telegram verified: ${telegramUser.firstName || 'Member'} · ID ${telegramUser.id}` : telegramStatus === 'checking' ? 'Verifying your Telegram account securely…' : telegramStatus === 'unavailable' ? 'Open EmpireCoin from the official Telegram bot to verify your account.' : 'Telegram verification is not configured yet. Please try again later.'}</div></div>}
+        {section === 'profile' && <div className="feature-panel"><span className="feature-icon">◉</span><span className="eyebrow">MEMBER AREA</span><h2>Your Empire ID</h2><p>Your verified Telegram profile, membership status, and account activity will appear here.</p><div className="notice">{telegramStatus === 'verified' && telegramUser ? `Telegram verified: ${telegramUser.firstName || 'Member'} · ID ${telegramUser.id}` : telegramStatus === 'checking' ? 'Verifying your Telegram account securely…' : telegramStatus === 'unavailable' ? 'Open EmpireCoin from the official Telegram bot to verify your account.' : `Telegram verification failed: ${telegramError || 'Please try again later.'}`}</div></div>}
         {section === 'admin' && <div className="feature-panel admin-panel">
           <span className="feature-icon">♛</span><span className="eyebrow">SECURE CONTROL ROOM</span><h2>Admin dashboard</h2>
           {adminStatus === 'checking' && <div className="notice">Checking administrator permissions…</div>}
