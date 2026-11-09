@@ -1,0 +1,20 @@
+{
+  "name": "EmpireCoin TON development",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "postCreateCommand": "curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ton-blockchain/acton/releases/download/v1.2.1/acton-installer.sh | sh && echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.bashrc",
+  "forwardPorts": [3015],
+  "portsAttributes": {
+    "3015": {
+      "label": "Acton Studio",
+      "onAutoForward": "notify",
+      "visibility": "private"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
