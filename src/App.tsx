@@ -69,7 +69,7 @@ function App() {
     <main className="app-shell">
       <header className="topbar">
         <a className="brand" href="#" onClick={() => setSection('home')} aria-label="EmpireCoin home">
-          <span className="brand-mark">♛</span>
+          <span className="brand-mark"><img src={`${import.meta.env.BASE_URL}crown.svg`} alt="EmpireCoin crown" /></span>
           <span className="brand-name">EMPIRE<span>COIN</span></span>
         </a>
         <span className="network-pill"><i /> TON ECOSYSTEM</span>
@@ -89,7 +89,7 @@ function App() {
           <div className="balance-value">0 <small>EMPC</small></div>
           <div className="balance-bottom">
             <span>On-chain balance will appear after wallet connection.</span>
-            <span className="coin-symbol">♛</span>
+            <img className="coin-crown" src={`${import.meta.env.BASE_URL}crown.svg`} alt="" />
           </div>
         </div>
       </section>
@@ -102,7 +102,7 @@ function App() {
               <article className="stat-card"><span className="stat-icon">◈</span><span className="muted-label">Wallet status</span><strong>{wallet ? 'Connected' : 'Not connected'}</strong><small>{wallet ? shortAddress : 'Connect your TON wallet'}</small></article>
               <article className="stat-card"><span className="stat-icon">✦</span><span className="muted-label">Daily earning</span><strong>Coming soon</strong><small>Reward rules not activated</small></article>
             </div>
-            <div className="section-heading compact"><div><span className="eyebrow">EXPLORE</span><h2>Empire services</h2></div></div>
+            <div className="mining-panel"><div className="mining-head"><span className="mining-icon">ϟ</span><div><span className="eyebrow">EMPC REWARDS</span><h2>Free Mining</h2></div><span className="mining-lock">LOCKED</span></div><p>Start earning EMPC through scheduled activity. Invite eligible friends to increase your mining speed.</p><div className="mining-stats"><div><small>Mining speed</small><strong>1.0×</strong></div><div><small>Referral boost</small><strong>0%</strong></div><div><small>Session status</small><strong>Not started</strong></div></div><button className="gold-button mining-start" disabled>{wallet ? "Verify wallet ownership first" : "Connect TON wallet first"}</button><div className="mining-foot">Wallet connection alone is not proof of ownership. Mining stays locked until Telegram and TON wallet verification, anti-fraud checks, and reward limits are active.</div><button className="referral-boost" onClick={() => setSection("referrals")}><span>♧</span><span><b>Invite friends · Boost mining speed</b><small>Referral multipliers will apply after verified invitations.</small></span><em>›</em></button></div><div className="section-heading compact"><div><span className="eyebrow">EXPLORE</span><h2>Empire services</h2></div></div>
             <div className="service-list">
               <button className="service-row" onClick={() => setSection('tasks')}><span className="service-icon">▤</span><span><b>Tasks & campaigns</b><small>Complete tasks and create promotions</small></span><em>›</em></button>
               <button className="service-row" onClick={() => setSection('referrals')}><span className="service-icon">♧</span><span><b>Referral program</b><small>Invite friends and track rewards</small></span><em>›</em></button>
@@ -120,7 +120,7 @@ function App() {
       <nav className="bottom-nav" aria-label="Main navigation">
         {navItems.map(item => <button key={item.id} className={section === item.id ? 'nav-item active' : 'nav-item'} onClick={() => setSection(item.id)}><span>{item.icon}</span><small>{item.label}</small></button>)}
       </nav>
-      <footer className="footer"><span>♛ EMPIRECOIN</span><span>BUILT ON TON · {new Date().getFullYear()}</span></footer>
+      <footer className="footer"><span><img className="footer-crown" src={`${import.meta.env.BASE_URL}crown.svg`} alt="" /> EMPIRECOIN</span><span>BUILT ON TON · {new Date().getFullYear()}</span></footer>
     </main>
   )
 }
