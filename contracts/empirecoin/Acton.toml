@@ -1,0 +1,43 @@
+[package]
+name = "empirecoin-jetton"
+description = "EmpireCoin TON Jetton workspace"
+version = "0.1.0"
+license = "MIT"
+
+[toolchain]
+acton = "1.2.0"
+
+[contracts.JettonMinter]
+src = "contracts/JettonMinter.tolk"
+
+[[contracts.JettonMinter.depends]]
+name = "JettonWallet"
+kind = "embed_code"
+function = "jettonWalletCompiledCode"
+
+[contracts.JettonWallet]
+src = "contracts/JettonWallet.tolk"
+depends = []
+
+[test.mutation]
+minimum-percent = 75.0
+
+[lint]
+max-warnings = 0
+
+[fmt]
+width = 100
+
+[import-mappings]
+acton = ".acton"
+contracts = "contracts"
+gen = "gen"
+tests = "tests"
+wrappers = "wrappers"
+scripts = "scripts"
+
+[scripts]
+build = "acton build"
+test-jetton = "acton test tests"
+check = "acton check"
+format-check = "acton fmt --check"
