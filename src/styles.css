@@ -99,3 +99,72 @@ button{font:inherit}
 .admin-add button{padding:10px 12px;border:1px solid rgba(213,173,98,.45);border-radius:10px;background:rgba(213,173,98,.14);color:#f3d18a;font-size:12px}
 
 .deploy-panel .ton-connect-button{margin:12px 0}.deploy-status{font-size:11px;line-height:1.7;padding:12px;border-radius:9px;margin:14px 0;overflow-wrap:anywhere}.deploy-status.good{color:#baf5d2;background:rgba(34,150,91,.12);border:1px solid rgba(73,207,135,.3)}.deploy-status.warn{color:#ffe0a1;background:rgba(176,116,28,.12);border:1px solid rgba(230,175,77,.3)}.deploy-panel code{overflow-wrap:anywhere;color:#a9eaff}.deploy-panel a{color:#75e6ff;font-size:12px}
+
+
+/* EmpireCoin Royal Ivory theme */
+:root{
+  color:#29251e;background:#f7f3e9;
+  --gold:#b7862e;--gold2:#d8b45f;--cyan:#b7862e;--blue:#9b762e;
+  --muted:#777064;--panel:rgba(255,253,247,.94);--line:rgba(164,125,49,.22);
+}
+html,body{background:#f7f3e9;color:#29251e}
+body{
+ background:radial-gradient(ellipse at 50% -15%,rgba(226,198,132,.26),transparent 46%),
+ radial-gradient(circle at 100% 55%,rgba(211,181,116,.12),transparent 34%),#f7f3e9;
+}
+.app-shell{
+ background-color:#f7f3e9;
+ background-image:linear-gradient(rgba(164,125,49,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(164,125,49,.035) 1px,transparent 1px);
+}
+.topbar{border-bottom-color:rgba(164,125,49,.22)}
+.topbar:after{background:#c49a46;box-shadow:0 0 10px rgba(196,154,70,.35)}
+.brand{color:#28231b}.brand-mark{border-color:#c49a46;background:linear-gradient(145deg,#fffaf0,#efe3c7);color:#9b762e;box-shadow:inset 0 0 14px rgba(196,154,70,.08)}
+.brand-name span{color:#a77b29}
+.network-pill{color:#77633d;border-color:rgba(164,125,49,.28);background:#f1e9d8}
+.network-pill i,.eyebrow span{background:#b7862e;box-shadow:0 0 8px rgba(183,134,46,.35)}
+.hero-glow{background:radial-gradient(ellipse,rgba(218,185,113,.22),transparent 70%)}
+.eyebrow,.live-label{color:#9a7025}
+.hero h1{background:linear-gradient(100deg,#32291a 15%,#8b692e 65%,#b58b3e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-copy{color:#827866}
+.balance-card{border-color:rgba(183,134,46,.4);background:linear-gradient(125deg,#fffaf0,#f0e5ce 58%,#f8f1e4);box-shadow:0 12px 32px rgba(83,62,25,.09),inset 0 1px rgba(255,255,255,.8)}
+.balance-card:before{background:linear-gradient(115deg,transparent 20%,rgba(183,134,46,.07) 48%,transparent 72%)}
+.balance-card:after{color:rgba(183,134,46,.08)}
+.muted-label,.balance-bottom{color:#786d5b}
+.demo-tag{color:#8a6422;border-color:rgba(183,134,46,.4);background:rgba(183,134,46,.07)}
+.balance-value{color:#30291e}.balance-value small,.coin-symbol{color:#a77b29}
+.section-heading h2,.feature-panel h2{color:#30291e}
+.stat-card{background:linear-gradient(145deg,#fffdf8,#f2ecdf);border-color:rgba(164,125,49,.2);box-shadow:0 5px 16px rgba(83,62,25,.045)}
+.stat-icon,.service-icon{color:#a77b29}
+.stat-card strong{color:#30291e}.stat-card small,.service-row small{color:#7b7366}
+.service-list{border-color:rgba(164,125,49,.2);background:#fffdf8}
+.service-row{color:#30291e;border-bottom-color:rgba(164,125,49,.13)}
+.service-row:active{background:rgba(183,134,46,.08)}.service-row em{color:#a77b29}
+.feature-panel{border-color:rgba(164,125,49,.23);background:linear-gradient(145deg,#fffdf8,#f2ecdf);box-shadow:0 10px 26px rgba(83,62,25,.06)}
+.feature-icon{color:#a77b29;text-shadow:0 0 14px rgba(183,134,46,.2)}
+.feature-panel p{color:#71695c}
+.notice{color:#66532e;background:#f7f0df;border-color:rgba(164,125,49,.22)}
+.gold-button{border-color:#b7862e;background:linear-gradient(110deg,#a97827,#e0bd6d);color:#21190c;box-shadow:0 5px 18px rgba(183,134,46,.16)}
+.bottom-nav{background:rgba(255,253,247,.97);border-top-color:rgba(164,125,49,.24);box-shadow:0 -5px 20px rgba(80,61,28,.06)}
+.bottom-nav:before{background:linear-gradient(90deg,transparent,#c49a46,transparent)}
+.nav-item{color:#8b8376}.nav-item.active{color:#9b7025;text-shadow:none}
+.footer{color:#8a8173}
+.mining-panel{border-color:rgba(183,134,46,.3);background:radial-gradient(ellipse at 10% 0%,rgba(218,185,113,.16),transparent 48%),linear-gradient(145deg,#fffdf8,#f0e7d6);box-shadow:0 10px 28px rgba(83,62,25,.07)}
+.mining-panel:after{border-color:rgba(183,134,46,.12);box-shadow:0 0 0 18px rgba(183,134,46,.035),0 0 0 38px rgba(183,134,46,.025)}
+.mining-icon{color:#986b20;background:linear-gradient(145deg,#f7e8c3,#eee2c9);border-color:rgba(183,134,46,.32);text-shadow:none}
+.mining-head h2{color:#30291e}.mining-lock{color:#8a6422;border-color:rgba(183,134,46,.3);background:rgba(183,134,46,.07)}
+.mining-panel>p{color:#71695c}
+.mining-stats div{border-color:rgba(164,125,49,.16);background:rgba(255,255,255,.65)}
+.mining-stats small{color:#817767}.mining-stats strong{color:#9b7025}
+.mining-start{background:linear-gradient(110deg,#a97827,#e0bd6d 52%,#b7862e);border-color:#c49a46;color:#21190c}
+.mining-foot{color:#776c5a;border-left-color:rgba(183,134,46,.5);background:rgba(183,134,46,.06)}
+.referral-boost{border-color:rgba(69,145,101,.25);background:linear-gradient(100deg,rgba(225,242,229,.8),rgba(248,252,245,.9));color:#294d37}
+.referral-boost>span:first-child,.referral-boost em{color:#43835b}.referral-boost small{color:#688574}
+.admin-panel h3{color:#9b7025}
+.admin-toggle,.admin-user{border-color:rgba(164,125,49,.2);background:#fffdf8;color:#30291e}
+.admin-fields label{color:#746b5d}
+.admin-fields input,.admin-add input{border-color:rgba(164,125,49,.25);background:#fff;color:#30291e}
+.admin-user button{border-color:rgba(190,95,75,.3);background:rgba(190,95,75,.07);color:#a64c3b}
+.admin-add button{border-color:rgba(183,134,46,.4);background:rgba(183,134,46,.1);color:#8c641f}
+.deploy-status.good{color:#28613e;background:rgba(57,155,91,.09);border-color:rgba(57,155,91,.25)}
+.deploy-status.warn{color:#80591e;background:rgba(218,165,71,.1);border-color:rgba(183,134,46,.25)}
+.deploy-panel code,.deploy-panel a{color:#946b25}
