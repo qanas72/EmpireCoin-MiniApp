@@ -349,3 +349,29 @@ get fun `test shard: wallet address should keep owner shard prefix in get/discov
         prefix += 1;
     }
 }
+
+get fun `test admin: dropped admin cannot mint additional supply`() {
+    val (minter, deployer, notDeployer) = setupTest();
+    val supplyBefore = minter.getTotalSupply();
+
+    val dropResult = minter.sendDropAdmin(deployer.address);
+    expect(dropResult).toHaveSuccessfulTx<DropMinterAdmin>({
+        from: deployer.address,
+        to: minter.address,
+    });
+    expect(minter.getAdminAddress()).toEqual(null);
+
+    val mintResult = minter.sendMint(
+        deployer.address,
+        notDeployer.address,
+        grams("1"),
+        grams("0.05"),
+        grams("0.3"),
+    );
+    expect(mintResult).toHaveFailedTx<MintNewJettons>({
+        from: deployer.address,
+        to: minter.address,
+    });
+    expect(minter.getTotalSupply()).toEqual(supplyBefore);
+    expect(minter.getAdminAddress()).toEqual(null);
+}
