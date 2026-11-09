@@ -9,11 +9,33 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
       html,body{margin:0;min-height:100%;background:#050914;color:#eaf5ff;font-family:Arial,sans-serif}
-      #boot-status{max-width:520px;margin:18vh auto;padding:24px;text-align:center;color:#b9d7ec}
+      #boot-status{max-width:520px;margin:18vh auto;padding:24px;text-align:center;color:#b9d7ec;overflow-wrap:anywhere}
     </style>
   </head>
   <body>
     <div id="root"><div id="boot-status">EmpireCoin is loading…</div></div>
+    <script>
+      (function () {
+        function show(text) {
+          var root = document.getElementById('root');
+          if (!root || !root.querySelector('#boot-status')) return;
+          var panel = root.querySelector('#boot-status');
+          panel.textContent = text;
+        }
+        window.addEventListener('error', function (event) {
+          var target = event.target;
+          if (target && target.tagName === 'SCRIPT') {
+            show('EmpireCoin could not download its app file. File: ' + (target.src || 'unknown') + ' · Please send this message to support.');
+          }
+        }, true);
+        window.addEventListener('unhandledrejection', function (event) {
+          show('EmpireCoin startup error: ' + String(event.reason && (event.reason.message || event.reason)));
+        });
+        window.setTimeout(function () {
+          show('The EmpireCoin app file did not start within 10 seconds. Please send this message to support.');
+        }, 10000);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
