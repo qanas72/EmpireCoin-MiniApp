@@ -1,0 +1,16 @@
+{
+  "name": "EmpireCoin",
+  "symbol": "EMPC",
+  "decimals": "9",
+  "network": "ton",
+  "standard": "TEP-74",
+  "metadataStandard": "TEP-64",
+  "walletDiscoveryStandard": "TEP-89",
+  "totalSupply": "1000000000",
+  "initialSupplyBaseUnits": "1000000000000000000",
+  "minting": {
+    "initialMintOnly": true,
+    "dropAdminAfterInitialMint": true,
+    "postLaunchMinting": false
+  }
+}
