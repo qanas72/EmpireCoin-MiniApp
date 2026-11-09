@@ -371,6 +371,7 @@ get fun `test admin: dropped admin cannot mint additional supply`() {
     expect(mintResult).toHaveFailedTx<MintNewJettons>({
         from: deployer.address,
         to: minter.address,
+        exitCode: 7,
     });
     expect(minter.getTotalSupply()).toEqual(supplyBefore);
     expect(minter.getAdminAddress()).toEqual(null);
