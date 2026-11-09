@@ -63,3 +63,22 @@ button{font:inherit}
 .wallet-address{overflow-wrap:anywhere}
 @media(min-width:650px){.app-shell{padding-left:34px;padding-right:34px}.hero{padding-top:58px}.balance-card{padding:28px}.content{padding-bottom:20px}}
 @media(max-width:380px){.app-shell{padding-left:15px;padding-right:15px}.network-pill{font-size:8px}.hero h1{font-size:29px}.balance-value{font-size:36px}}
+
+.brand-mark{overflow:hidden;padding:2px}.brand-mark img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 7px rgba(245,194,82,.4))}
+.coin-crown{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(245,194,82,.45));position:relative;z-index:1}
+.mining-panel{margin-top:22px;padding:20px;border:1px solid rgba(77,229,255,.42);border-radius:15px;background:radial-gradient(ellipse at 10% 0%,rgba(24,142,190,.19),transparent 48%),linear-gradient(145deg,rgba(15,35,61,.98),rgba(5,13,27,.98));box-shadow:0 12px 38px #0008,inset 0 1px rgba(255,255,255,.06);position:relative;overflow:hidden}
+.mining-panel:after{content:"";position:absolute;right:-45px;top:5px;width:160px;height:160px;border:1px solid rgba(77,229,255,.09);border-radius:50%;box-shadow:0 0 0 18px rgba(77,229,255,.025),0 0 0 38px rgba(77,229,255,.02);pointer-events:none}
+.mining-head{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.mining-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#ffe08a;font-size:29px;background:linear-gradient(145deg,rgba(176,111,20,.28),rgba(30,45,65,.7));border:1px solid rgba(242,193,87,.35);text-shadow:0 0 14px #f5bd4b}
+.mining-head h2{font-family:'Space Grotesk',sans-serif;font-size:22px;margin:3px 0;color:#f4f8ff}
+.mining-lock{margin-left:auto;font-size:8px;letter-spacing:1.3px;color:#ffc96b;border:1px solid rgba(255,201,107,.35);border-radius:5px;padding:6px 8px;background:rgba(255,185,65,.07)}
+.mining-panel>p{font-size:12px;line-height:1.8;color:#9eb5cb;margin:16px 0}
+.mining-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.mining-stats div{padding:11px 8px;border:1px solid rgba(91,196,255,.13);border-radius:9px;background:rgba(5,14,28,.65);display:flex;flex-direction:column;gap:6px}
+.mining-stats small{font-size:9px;color:#849bb3}.mining-stats strong{font-family:'Space Grotesk',sans-serif;font-size:15px;color:#f4d27d}
+.mining-start{width:100%;padding:14px;margin:2px 0 12px;background:linear-gradient(110deg,#9a6a25,#e4bd63 52%,#a8752b);border-color:#f3d17b;color:#17100a}
+.mining-start:disabled{opacity:.7;filter:saturate(.7)}
+.mining-foot{font-size:10px;line-height:1.7;color:#8299b1;padding:10px 11px;border-left:2px solid rgba(77,229,255,.45);background:rgba(77,229,255,.045)}
+.referral-boost{width:100%;display:flex;align-items:center;gap:12px;text-align:left;margin-top:15px;padding:13px;border:1px solid rgba(65,219,144,.28);border-radius:10px;background:linear-gradient(100deg,rgba(13,71,56,.36),rgba(7,25,34,.55));color:#e8fff3;cursor:pointer}
+.referral-boost>span:first-child{font-size:24px;color:#62e9a2}.referral-boost>span:nth-child(2){display:flex;flex-direction:column;gap:5px;flex:1}.referral-boost b{font-size:11px}.referral-boost small{font-size:9px;color:#91bba8}.referral-boost em{font-size:23px;color:#62e9a2;font-style:normal}
+.footer-crown{width:17px;height:17px;vertical-align:middle;object-fit:contain}
