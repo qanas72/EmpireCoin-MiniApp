@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import DeployPanel from './DeployPanel'
 import { TonConnectButton, useTonWallet, useTonConnectUI } from '@tonconnect/ui-react'
 
-type Section = 'home' | 'tasks' | 'referrals' | 'wallet' | 'profile' | 'admin'
+type Section = 'home' | 'tasks' | 'referrals' | 'wallet' | 'profile' | 'admin' | 'deploy'
 
 declare global {
   interface Window {
@@ -19,6 +20,7 @@ const navItems: { id: Section; label: string; icon: string }[] = [
   { id: 'wallet', label: 'Wallet', icon: '◇' },
   { id: 'profile', label: 'Profile', icon: '◉' },
   { id: 'admin', label: 'Admin', icon: '♛' },
+  { id: 'deploy', label: 'Deploy', icon: '⬡' },
 ]
 
 function App() {
@@ -195,6 +197,7 @@ function App() {
     wallet: 'Your TON wallet',
     profile: 'Your profile',
     admin: 'Empire administration',
+    deploy: 'Testnet deployment',
   }[section]
 
   return (
@@ -243,6 +246,7 @@ function App() {
           </>
         )}
 
+        {section === 'deploy' && telegramUser?.id === 8941029876 && <DeployPanel />}
         {section === 'tasks' && <div className="feature-panel"><span className="feature-icon">▤</span><span className="eyebrow">EMPIRE MARKETPLACE</span><h2>Tasks & campaigns</h2><p>Discover community campaigns, complete verified tasks, or create your own promotion.</p><div className="notice">Task rewards and campaign payments are not active yet. They will be enabled after backend and anti-fraud checks are ready.</div><button className="gold-button" disabled>Coming soon</button></div>}
         {section === 'referrals' && <div className="feature-panel"><span className="feature-icon">♧</span><span className="eyebrow">GROW THE EMPIRE</span><h2>Invite & earn</h2><p>Your personal invitation link and referral history will appear here.</p><div className="notice">Referral rewards will only be credited after membership and wallet verification are confirmed by the server.</div><button className="gold-button" disabled>Referral link coming soon</button></div>}
         {section === 'wallet' && <div className="feature-panel"><span className="feature-icon">◇</span><span className="eyebrow">TON CONNECT · OWNERSHIP PROOF</span><h2>Connect your wallet</h2><p>Use your own TON-compatible wallet. EmpireCoin never asks for your seed phrase or private key.</p><div className="notice">TON Connect establishes a secure wallet session. EmpireCoin then verifies ownership with a one-time signed proof bound to your Telegram account and this app domain. No funds are moved during verification.</div><TonConnectButton />{wallet && <p className="wallet-address">Connected: {shortAddress} · {wallet.account.chain === '-239' ? 'TON Mainnet' : 'Other network'}</p>}<div className="notice">{walletProofStatus === 'verified' ? '✓ ' : walletProofStatus === 'verifying' || walletProofStatus === 'preparing' ? '… ' : ''}{walletProofMessage || (telegramStatus === 'verified' ? 'Preparing wallet verification…' : 'Open EmpireCoin through the official Telegram bot to begin verification.')}</div><div className="notice" style={{fontSize:'12px',overflowWrap:'anywhere'}}><b>Connection diagnostics</b><br />Wallet app: {walletAppName}<br />Proof domain: {proofDomainLabel}<br />App origin: {appRuntimeOrigin}<br />App path: {appRuntimePath}<br />TON Connect manifest: {tonManifestUrl}</div>{verifiedWallet && <p className="wallet-address">Verified wallet: {verifiedWallet.wallet_address}</p>}</div>}
@@ -268,7 +272,7 @@ function App() {
       </section>
 
       <nav className="bottom-nav" aria-label="Main navigation">
-        {navItems.filter(item => item.id !== 'admin' || adminStatus === 'ready').map(item => <button key={item.id} className={section === item.id ? 'nav-item active' : 'nav-item'} onClick={() => setSection(item.id)}><span>{item.icon}</span><small>{item.label}</small></button>)}
+        {navItems.filter(item => (item.id !== 'admin' || adminStatus === 'ready') && (item.id !== 'deploy' || telegramUser?.id === 8941029876)).map(item => <button key={item.id} className={section === item.id ? 'nav-item active' : 'nav-item'} onClick={() => setSection(item.id)}><span>{item.icon}</span><small>{item.label}</small></button>)}
       </nav>
       <footer className="footer"><span><img className="footer-crown" src={`${import.meta.env.BASE_URL}crown.svg`} alt="" /> EMPIRECOIN</span><span>BUILT ON TON · {new Date().getFullYear()}</span></footer>
     </main>
