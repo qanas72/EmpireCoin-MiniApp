@@ -11,11 +11,11 @@ function showBootError(reason: unknown) {
   const message = reason instanceof Error ? reason.message : String(reason)
   root.innerHTML = ''
   const panel = document.createElement('div')
-  panel.style.cssText = 'max-width:520px;margin:12vh auto;padding:24px;color:#eaf5ff;background:#101d32;border:1px solid #d6b66d;border-radius:14px;font:14px/1.7 Arial,sans-serif;overflow-wrap:anywhere'
+  panel.style.cssText = 'max-width:520px;margin:12vh auto;padding:24px;color:#29251e;background:#fffaf0;border:1px solid #c49a46;border-radius:14px;font:14px/1.7 Arial,sans-serif;overflow-wrap:anywhere'
   const heading = document.createElement('h2')
   heading.textContent = 'EmpireCoin could not start'
   const detail = document.createElement('pre')
-  detail.style.cssText = 'white-space:pre-wrap;color:#ffd58a;font:12px/1.6 monospace'
+  detail.style.cssText = 'white-space:pre-wrap;color:#8a6422;font:12px/1.6 monospace'
   detail.textContent = message.slice(0, 1200)
   const hint = document.createElement('p')
   hint.textContent = 'Please send this error message to EmpireCoin support. Do not connect a wallet or approve a transaction.'
