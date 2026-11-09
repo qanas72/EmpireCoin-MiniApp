@@ -1,221 +1,160 @@
-const SUPABASE_URL = 'https://hxmkdnuqphvkxdxgwrrb.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_2OFnM9_zBht8PbOvv5anaQ_1yaJmv--';
-const MAINNET_CHAIN = '-239';
-const $ = (id) => document.getElementById(id);
-let telegramInitData = '';
-let telegramVerified = false;
-let tonUI = null;
-let proofBusy = false;
-let verifiedWallet = null;
+const SUPABASE_URL='https://hxmkdnuqphvkxdxgwrrb.supabase.co';
+const SUPABASE_KEY='sb_publishable_2OFnM9_zBht8PbOvv5anaQ_1yaJmv--';
+const MAINNET_CHAIN='-239';
+const $=id=>document.getElementById(id);
+let initData='',telegramUser=null,telegramVerified=false,tonUI=null,verifiedWallet=null,adminData=null,proofBusy=false,toastTimer=null;
 
-function setVerifyButtonVisible(visible) {
-  const button = $('verify-wallet-button');
-  button.classList.toggle('hidden', !visible);
-  button.disabled = !visible || proofBusy;
+function showError(message){const el=$('app-error');el.textContent=message;el.classList.remove('hidden')}
+function clearError(){$('app-error').textContent='';$('app-error').classList.add('hidden')}
+function toast(message){const el=$('toast');el.textContent=message;el.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add('hidden'),3200)}
+function shortAddress(value){return value?value.slice(0,7)+'…'+value.slice(-6):'Not connected'}
+function setVerifyButton(visible){const b=$('verify-wallet-button');b.classList.toggle('hidden',!visible);b.disabled=!visible||proofBusy}
+function go(view){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+view));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===view));window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>go(b.dataset.view)));
+$('menu-profile').addEventListener('click',()=>go('profile'));
+
+async function postFunction(name,body){
+ const r=await fetch(SUPABASE_URL+'/functions/v1/'+name,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY},body:JSON.stringify(body)});
+ const data=await r.json().catch(()=>({}));
+ if(!r.ok||data.error)throw new Error(data.error||('Request failed ('+r.status+')'));
+ return data;
+}
+async function walletApi(action,extra={}){if(!initData)throw new Error('Open the Mini App from @EmpireCoinOfficialBot.');return postFunction('ton-wallet-auth',{action,initData,...extra})}
+async function adminApi(action,payload={}){if(!initData)throw new Error('Telegram session unavailable.');return postFunction('admin-api',{action,initData,payload})}
+
+async function startTelegram(){
+ const webApp=window.Telegram?.WebApp;
+ if(!webApp?.initData){$('session-label').textContent='OPEN IN TELEGRAM';$('wallet-status').textContent='Open this Mini App from the official Telegram bot to connect your account.';return false}
+ webApp.ready?.();webApp.expand?.();initData=webApp.initData;
+ try{
+  const data=await postFunction('telegram-auth',{initData});
+  if(!data.ok||!data.telegramUser)throw new Error('Telegram verification failed.');
+  telegramUser=data.telegramUser;telegramVerified=true;
+  const full=[telegramUser.firstName,telegramUser.lastName].filter(Boolean).join(' ')||'Telegram member';
+  const initials=full.split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+  $('session-label').textContent='SECURE SESSION';$('profile-name').textContent=full;$('profile-username').textContent=telegramUser.username?'@'+telegramUser.username:'Telegram account';$('profile-id').textContent=String(telegramUser.id);$('profile-avatar').textContent=initials;$('menu-profile').textContent=initials;
+  $('user-card')?.classList.add('hidden');
+  return true;
+ }catch(e){$('session-label').textContent='SESSION ERROR';showError('Telegram: '+e.message);return false}
 }
 
-const showError = (message) => {
-  const el = $('app-error');
-  el.textContent = message;
-  el.classList.remove('hidden');
-};
-const clearError = () => {
-  $('app-error').textContent = '';
-  $('app-error').classList.add('hidden');
-};
-const setStatus = (id, message) => { $(id).textContent = message; };
-
-async function walletApi(action, extra = {}) {
-  if (!telegramInitData) throw new Error('Open the Mini App from the official Telegram bot first.');
-  const response = await fetch(SUPABASE_URL + '/functions/v1/ton-wallet-auth', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY },
-    body: JSON.stringify({ action, initData: telegramInitData, ...extra })
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok || !data.ok) throw new Error(data.error || 'Wallet verification request failed.');
-  return data;
+async function loadVerifiedWallet(){
+ const result=await walletApi('status');const saved=result.wallet;
+ verifiedWallet=saved?.verified?saved:null;
+ if(verifiedWallet){
+  $('wallet-verification').classList.remove('hidden');$('verified-address').textContent=verifiedWallet.wallet_address+' · TON Mainnet';
+  $('home-wallet').textContent=shortAddress(verifiedWallet.wallet_address);$('profile-wallet').textContent=shortAddress(verifiedWallet.wallet_address);
+  $('wallet-status').textContent='Your TON Mainnet wallet ownership is verified.';
+  setVerifyButton(false);
+ }else{
+  $('wallet-verification').classList.add('hidden');$('home-wallet').textContent='Not connected';$('profile-wallet').textContent='Not connected';
+  setVerifyButton(true);
+ }
+ return verifiedWallet;
 }
-
-async function startTelegram() {
-  const webApp = window.Telegram?.WebApp;
-  if (!webApp?.initData) {
-    setStatus('telegram-status', 'Open this page from the official @EmpireCoinOfficialBot menu to verify your Telegram account.');
-    $('account-note').textContent = 'Telegram verification is required before linking a wallet.';
-    return false;
-  }
-  webApp.ready?.();
-  webApp.expand?.();
-  telegramInitData = webApp.initData;
-  setStatus('telegram-status', 'Securely verifying your Telegram account…');
-  try {
-    const response = await fetch(SUPABASE_URL + '/functions/v1/telegram-auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY },
-      body: JSON.stringify({ initData: telegramInitData })
-    });
-    const data = await response.json();
-    if (!response.ok || !data.ok || !data.telegramUser) throw new Error(data.error || 'Telegram verification failed');
-    telegramVerified = true;
-    const user = data.telegramUser;
-    $('telegram-title').textContent = 'Telegram connected';
-    setStatus('telegram-status', 'Your Telegram identity has been verified by the server.');
-    $('user-card').textContent = [user.firstName, user.username ? '@' + user.username : null, 'ID: ' + user.id].filter(Boolean).join(' · ');
-    $('user-card').classList.remove('hidden');
-    $('account-note').textContent = 'Telegram account verified. Your wallet can now be securely linked.';
-    return true;
-  } catch (error) {
-    setStatus('telegram-status', 'Telegram verification could not be completed.');
-    showError('Telegram: ' + (error?.message || String(error)));
-    return false;
-  }
+async function prepareWalletProof(){
+ if(!telegramVerified||!tonUI||verifiedWallet)return;
+ tonUI.setConnectRequestParameters({state:'loading'});
+ try{const result=await walletApi('payload');tonUI.setConnectRequestParameters({state:'ready',value:{tonProof:result.payload}});$('wallet-status').textContent='Secure ownership challenge ready. Connect your TON Mainnet wallet.'}
+ catch(e){tonUI.setConnectRequestParameters(null);$('wallet-status').textContent='Could not prepare the wallet verification challenge.';showError('Wallet challenge: '+e.message)}
 }
-
-async function prepareWalletProof() {
-  if (!telegramVerified || !tonUI) return;
-  tonUI.setConnectRequestParameters({ state: 'loading' });
-  try {
-    const result = await walletApi('payload');
-    tonUI.setConnectRequestParameters({ state: 'ready', value: { tonProof: result.payload } });
-    setStatus('wallet-status', 'Secure ownership challenge ready. Connect or verify your TON Mainnet wallet.');
-  } catch (error) {
-    tonUI.setConnectRequestParameters(null);
-    setStatus('wallet-status', 'Wallet verification challenge could not be prepared.');
-    showError('Wallet challenge: ' + (error?.message || String(error)));
-  }
+async function verifyConnectedWallet(wallet){
+ const proof=wallet?.connectItems?.tonProof;
+ if(!proof||!('proof'in proof)){
+  if(verifiedWallet&&wallet?.account?.address===verifiedWallet.wallet_address&&wallet?.account?.chain===MAINNET_CHAIN){
+   $('wallet-status').textContent='Verified TON Mainnet wallet: '+shortAddress(verifiedWallet.wallet_address);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);
+  }else if(!verifiedWallet){$('wallet-status').textContent='Wallet connected. Ownership still needs verification.';setVerifyButton(true)}
+  else{$('wallet-status').textContent='A different wallet is connected. Your previously verified wallet remains on your account.';setVerifyButton(false)}
+  return;
+ }
+ if(verifiedWallet){setVerifyButton(false);return}
+ try{
+  if(wallet.account.chain!==MAINNET_CHAIN)throw new Error('Please connect your TON Mainnet wallet, not Testnet.');
+  $('wallet-status').textContent='Verifying wallet signature securely…';
+  const result=await walletApi('verify',{address:wallet.account.address,network:wallet.account.chain,public_key:wallet.account.publicKey,proof:{...proof.proof,state_init:wallet.account.walletStateInit}});
+  verifiedWallet=result.wallet;$('wallet-verification').classList.remove('hidden');$('verified-address').textContent=result.wallet.wallet_address+' · TON Mainnet';
+  $('wallet-status').textContent='Wallet ownership verified successfully.';$('home-wallet').textContent=shortAddress(result.wallet.wallet_address);$('profile-wallet').textContent=shortAddress(result.wallet.wallet_address);
+  setVerifyButton(false);clearError();toast('TON Mainnet wallet verified.');
+ }catch(e){$('wallet-status').textContent='Wallet ownership verification failed.';setVerifyButton(!verifiedWallet);showError('Wallet proof: '+e.message)}
 }
-
-async function loadVerifiedWallet() {
-  if (!telegramVerified) return null;
-  try {
-    const result = await walletApi('status');
-    const saved = result.wallet;
-    verifiedWallet = saved?.verified ? saved : null;
-    if (verifiedWallet) {
-      $('wallet-status').textContent = 'Previously verified wallet: ' + saved.wallet_address + ' · TON Mainnet.';
-      $('wallet-verification').textContent = 'Wallet ownership verified';
-      $('wallet-verification').classList.remove('hidden');
-      setVerifyButtonVisible(false);
-      return verifiedWallet;
-    }
-    $('wallet-verification').classList.add('hidden');
-    setVerifyButtonVisible(true);
-    return null;
-  } catch (error) {
-    showError('Wallet status: ' + (error?.message || String(error)));
-    return null;
-  }
+async function reconnectForProof(){
+ if(!telegramVerified||!tonUI||proofBusy||verifiedWallet)return;
+ proofBusy=true;setVerifyButton(true);$('verify-wallet-button').disabled=true;clearError();
+ try{await prepareWalletProof();if(tonUI.connected)await tonUI.disconnect();await tonUI.openModal()}
+ catch(e){showError('Reconnect: '+e.message)}
+ finally{proofBusy=false;setVerifyButton(!verifiedWallet)}
 }
-
-async function verifyConnectedWallet(wallet) {
-  const item = wallet?.connectItems?.tonProof;
-  if (!item || !('proof' in item)) {
-    const saved = await loadVerifiedWallet();
-    const connectedAddress = wallet?.account?.address;
-    if (saved && connectedAddress === saved.wallet_address && wallet?.account?.chain === MAINNET_CHAIN) {
-      $('wallet-verification').textContent = 'Wallet ownership verified';
-      $('wallet-verification').classList.remove('hidden');
-      setVerifyButtonVisible(false);
-      setStatus('wallet-status', 'Verified TON Mainnet wallet: ' + saved.wallet_address);
-    } else {
-      $('wallet-verification').classList.add('hidden');
-      setVerifyButtonVisible(true);
-      setStatus('wallet-status', 'This connected wallet is not the verified TON Mainnet wallet. Connect your verified wallet, or verify this wallet.');
-    }
+async function startWallet(){
+ try{
+  const {TonConnectUI}=await import('https://esm.sh/@tonconnect/ui@2.3.0');
+  tonUI=new TonConnectUI({manifestUrl:new URL('./tonconnect-manifest.json',window.location.href).href,buttonRootId:'ton-connect'});
+  tonUI.onStatusChange(async wallet=>{
+   if(!wallet){
+    if(verifiedWallet){$('wallet-status').textContent='Verified wallet saved to your account: '+shortAddress(verifiedWallet.wallet_address);$('wallet-verification').classList.remove('hidden');setVerifyButton(false)}
+    else{$('wallet-status').textContent=telegramVerified?'No TON wallet connected.':'Verify Telegram first.';setVerifyButton(telegramVerified)}
     return;
-  }
-
-  try {
-    if (wallet.account.chain !== MAINNET_CHAIN) throw new Error('Please connect your TON Mainnet wallet, not Testnet.');
-    setStatus('wallet-status', 'Checking your wallet ownership proof securely…');
-    const result = await walletApi('verify', {
-      address: wallet.account.address,
-      network: wallet.account.chain,
-      public_key: wallet.account.publicKey,
-      proof: { ...item.proof, state_init: wallet.account.walletStateInit }
-    });
-    verifiedWallet = result.wallet;
-    $('wallet-verification').textContent = 'Wallet ownership verified';
-    $('wallet-verification').classList.remove('hidden');
-    setVerifyButtonVisible(false);
-    setStatus('wallet-status', 'Verified TON Mainnet wallet: ' + result.wallet.wallet_address);
-    $('account-note').textContent = 'Telegram identity and TON Mainnet wallet are securely linked.';
-    clearError();
-  } catch (error) {
-    $('wallet-verification').classList.add('hidden');
-    setVerifyButtonVisible(true);
-    setStatus('wallet-status', 'Wallet ownership verification failed.');
-    showError('Wallet proof: ' + (error?.message || String(error)));
-  }
+   }
+   const addr=wallet.account?.address;
+   if(verifiedWallet&&addr===verifiedWallet.wallet_address&&wallet.account?.chain===MAINNET_CHAIN){
+    $('wallet-status').textContent='Verified TON Mainnet wallet: '+shortAddress(addr);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);return;
+   }
+   if(verifiedWallet){$('wallet-status').textContent='Another wallet is connected. Your verified wallet remains '+shortAddress(verifiedWallet.wallet_address)+'.';setVerifyButton(false);return}
+   $('wallet-status').textContent='Connected · '+(wallet.account?.chain===MAINNET_CHAIN?'TON Mainnet':'Other network')+' · '+shortAddress(addr);
+   if(telegramVerified)await verifyConnectedWallet(wallet);
+  });
+  if(telegramVerified){await loadVerifiedWallet();if(!verifiedWallet)await prepareWalletProof()}
+ }catch(e){$('wallet-status').textContent='Wallet connector could not load. Other sections remain available.';showError('TON Connect: '+e.message)}
 }
 
-async function reconnectForProof() {
-  if (!telegramVerified || !tonUI || proofBusy || verifiedWallet) return;
-  proofBusy = true;
-  $('verify-wallet-button').disabled = true;
-  clearError();
-  try {
-    await prepareWalletProof();
-    if (tonUI.connected) await tonUI.disconnect();
-    await tonUI.openModal();
-  } catch (error) {
-    showError('Reconnect: ' + (error?.message || String(error)));
-  } finally {
-    proofBusy = false;
-    setVerifyButtonVisible(!verifiedWallet);
-  }
+function fillMining(m){
+ $('cfg-base').value=m.daily_base_reward??0;$('cfg-referral').value=m.referral_daily_bonus??0;$('cfg-max-referrals').value=m.max_rewarded_referrals??0;$('cfg-speed').value=m.max_speed_multiplier??1;$('cfg-user-cap').value=m.per_user_daily_cap??0;$('cfg-global-cap').value=m.global_daily_budget??0;
+ $('earn-status').textContent=m.mining_enabled?'Flag enabled · reward engine pending':'Disabled';
 }
-
-async function startWallet() {
-  try {
-    const { TonConnectUI } = await import('https://esm.sh/@tonconnect/ui@2.3.0');
-    tonUI = new TonConnectUI({
-      manifestUrl: new URL('./tonconnect-manifest.json', window.location.href).href,
-      buttonRootId: 'ton-connect'
-    });
-    tonUI.onStatusChange(async (wallet) => {
-      if (!wallet) {
-        setStatus('wallet-status', telegramVerified ? 'No TON Mainnet wallet connected.' : 'Verify Telegram first to link a wallet.');
-        if (verifiedWallet) {
-          $('wallet-verification').textContent = 'Previously verified TON Mainnet wallet: ' + verifiedWallet.wallet_address;
-          $('wallet-verification').classList.remove('hidden');
-          setVerifyButtonVisible(false);
-        } else {
-          $('wallet-verification').classList.add('hidden');
-          setVerifyButtonVisible(telegramVerified);
-        }
-        return;
-      }
-      const address = wallet.account?.address || 'Address unavailable';
-      setStatus('wallet-status', 'Connected · TON Mainnet · ' + address.slice(0, 8) + '…' + address.slice(-6) + '. Checking ownership…');
-      if (telegramVerified) await verifyConnectedWallet(wallet);
-    });
-    if (telegramVerified) {
-      await loadVerifiedWallet();
-      await prepareWalletProof();
-      $('verify-wallet-button').classList.remove('hidden');
-      setVerifyButtonVisible(!verifiedWallet);
-    } else {
-      setStatus('wallet-status', 'Wallet connection is available after Telegram verification.');
-      $('verify-wallet-button').classList.add('hidden');
-    }
-  } catch (error) {
-    setStatus('wallet-status', 'Wallet connector could not load. The rest of the Mini App remains available.');
-    showError('TON Connect: ' + (error?.message || String(error)));
-  }
+function renderAdmins(list,actor){
+ const box=$('admin-list');box.replaceChildren();
+ (list||[]).forEach(a=>{
+  const row=document.createElement('div');row.className='admin-person';
+  const info=document.createElement('div');const name=document.createElement('b');name.textContent=String(a.telegram_user_id)+(a.telegram_user_id===actor?' · You':'');
+  const meta=document.createElement('small');meta.textContent=a.role.toUpperCase()+' · '+(a.is_active?'ACTIVE':'INACTIVE');
+  info.append(name,meta);row.append(info);
+  if(a.role!=='owner'&&a.is_active){const btn=document.createElement('button');btn.textContent='Deactivate';btn.addEventListener('click',()=>deactivateAdmin(a.telegram_user_id));row.append(btn)}
+  box.append(row);
+ });
+ if(!box.children.length)box.textContent='No administrator records returned.';
 }
-
-$('verify-wallet-button').addEventListener('click', reconnectForProof);
-
-window.addEventListener('error', event => {
-  if (event.message) showError('App error: ' + event.message);
-});
-window.addEventListener('unhandledrejection', event => {
-  showError('App startup error: ' + (event.reason?.message || String(event.reason)));
-});
-
-async function initialize() {
-  await startTelegram();
-  await startWallet();
+async function loadAdmin(){
+ $('admin-loading').textContent='Checking administrator permissions…';
+ try{
+  const data=await adminApi('dashboard');adminData=data;$('admin-loading').classList.add('hidden');$('admin-content').classList.remove('hidden');$('admin-nav').classList.remove('hidden');
+  $('admin-role').textContent=(data.admin?.role||'ADMIN').toUpperCase();$('admin-id').textContent='Telegram ID: '+data.admin.telegram_user_id;
+  fillMining(data.mining||{});renderAdmins(data.admins||[],telegramUser.id);
+  $('admin-management').classList.toggle('hidden',!data.admin.can_manage_admins);
+ }catch(e){$('admin-loading').classList.add('hidden');$('admin-nav').classList.add('hidden');$('admin-content').classList.add('hidden')}
+}
+async function saveMining(){
+ const payload={daily_base_reward:Number($('cfg-base').value),referral_daily_bonus:Number($('cfg-referral').value),max_rewarded_referrals:Number($('cfg-max-referrals').value),max_speed_multiplier:Number($('cfg-speed').value),per_user_daily_cap:Number($('cfg-user-cap').value),global_daily_budget:Number($('cfg-global-cap').value),mining_enabled:false,referrals_enabled:false};
+ if(Object.values(payload).some(v=>typeof v==='number'&&(!Number.isFinite(v)||v<0))||payload.max_speed_multiplier<1){toast('Check the settings values.');return}
+ try{const result=await adminApi('update_mining',payload);fillMining(result.mining);toast('Reward settings saved. Mining and referrals remain disabled.')}
+ catch(e){showError('Admin settings: '+e.message)}
+}
+async function addAdmin(){
+ const id=Number($('new-admin-id').value);if(!Number.isSafeInteger(id)||id<=0){toast('Enter a valid Telegram ID.');return}
+ try{await adminApi('add_admin',{telegram_user_id:id});$('new-admin-id').value='';await loadAdmin();toast('Administrator added.')}
+ catch(e){showError('Add administrator: '+e.message)}
+}
+async function deactivateAdmin(id){
+ if(!confirm('Deactivate administrator '+id+'?'))return;
+ try{await adminApi('deactivate_admin',{telegram_user_id:id});await loadAdmin();toast('Administrator deactivated.')}
+ catch(e){showError('Deactivate administrator: '+e.message)}
+}
+$('verify-wallet-button').addEventListener('click',reconnectForProof);
+$('save-settings').addEventListener('click',saveMining);$('add-admin').addEventListener('click',addAdmin);
+window.addEventListener('error',e=>{if(e.message)showError('App error: '+e.message)});
+window.addEventListener('unhandledrejection',e=>showError('Startup error: '+(e.reason?.message||String(e.reason))));
+async function initialize(){
+ const ok=await startTelegram();
+ if(!ok)return;
+ await Promise.all([startWallet(),loadAdmin()]);
 }
 initialize();
