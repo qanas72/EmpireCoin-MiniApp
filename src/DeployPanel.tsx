@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Address, beginCell, Cell, Dictionary } from '@ton/core'
+import { Address, beginCell, Cell, contractAddress, Dictionary } from '@ton/core'
 import { TonConnectButton, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 
 const EXPECTED_TESTNET_WALLET = '0QBa9SNhRIiPFJZRt3FROllgc70DOBmdLTKV9dxsTl2H2B4D'
@@ -80,11 +80,9 @@ export default function DeployPanel() {
       const code = Cell.fromBase64(artifact.code_boc64)
       const admin = Address.parse(wallet.account.address)
       const metadata = await makeMetadataCell()
+      const data = beginCell().storeCoins(0).storeAddress(admin).storeAddress(null).storeRef(metadata).endCell()
       const stateInit = makeStateInit(code, admin, metadata)
-      const destination = Address.fromRawString(
-        (await import('@ton/core')).contractAddress(0, { code, data: beginCell()
-          .storeCoins(0).storeAddress(admin).storeAddress(null).storeRef(metadata).endCell() }).toRawString()
-      )
+      const destination = contractAddress(0, { code, data })
       const derivedAddress = destination.toString({ bounceable: false, testOnly: true })
       setContractAddress(derivedAddress)
 
