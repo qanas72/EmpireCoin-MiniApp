@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Address, beginCell, Cell, contractAddress, Dictionary } from '@ton/core'
+import { Address, beginCell, Cell, contractAddress as deriveContractAddress, Dictionary } from '@ton/core'
 import { TonConnectButton, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 
 const EXPECTED_TESTNET_WALLET = '0QBa9SNhRIiPFJZRt3FROllgc70DOBmdLTKV9dxsTl2H2B4D'
@@ -53,8 +53,7 @@ export default function DeployPanel() {
   const [message, setMessage] = useState('')
   const [contractAddress, setContractAddress] = useState('')
   const [artifactHash, setArtifactHash] = useState('')
-  const [artifactError, setArtifactError] = useState('')
-
+  
   const walletAddress = useMemo(() => {
     if (!wallet) return ''
     try { return Address.parse(wallet.account.address).toRawString() } catch { return '' }
@@ -69,7 +68,6 @@ export default function DeployPanel() {
     }
     setBusy(true)
     setMessage('در حال آماده‌سازی قرارداد و بررسی شبکه…')
-    setArtifactError('')
     try {
       const response = await fetch(`${import.meta.env.BASE_URL}empirecoin-minter-code.json?build=1`, { cache: 'no-store' })
       if (!response.ok) throw new Error('فایل کامپایل‌شده قرارداد در دسترس نیست. کمی بعد دوباره تلاش کن.')
@@ -82,7 +80,7 @@ export default function DeployPanel() {
       const metadata = await makeMetadataCell()
       const data = beginCell().storeCoins(0).storeAddress(admin).storeAddress(null).storeRef(metadata).endCell()
       const stateInit = makeStateInit(code, admin, metadata)
-      const destination = contractAddress(0, { code, data })
+      const destination = deriveContractAddress(0, { code, data })
       const derivedAddress = destination.toString({ bounceable: false, testOnly: true })
       setContractAddress(derivedAddress)
 
