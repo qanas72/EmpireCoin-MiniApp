@@ -25,7 +25,7 @@ jobs:
           echo "$HOME/.acton/bin" >> "$GITHUB_PATH"
       - name: Build Jetton contracts
         working-directory: contracts/empirecoin
-        run: acton build
+        run: acton build --output-boc build/boc --output-sources build/sources
       - name: Run Jetton test suite
         working-directory: contracts/empirecoin
         run: acton test tests
@@ -46,3 +46,12 @@ jobs:
         run: |
           acton check
           acton fmt --check
+      - name: Upload compiled Testnet deployment artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: empirecoin-testnet-build-${{ github.sha }}
+          path: |
+            contracts/empirecoin/build/
+          if-no-files-found: error
+          retention-days: 14
