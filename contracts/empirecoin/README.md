@@ -23,6 +23,26 @@ The upstream Tolk source, wrappers, scripts, and tests are vendored from `ton-bl
 
 ## Important deployment design
 
+### Validate and deploy to Testnet
+
+The official Acton deployment flow supports TON Connect, so the owner can approve the transaction in their own wallet without sharing a seed phrase or private key.
+
+1. From this directory, run the local checks:
+   `acton build`, `acton test tests`, `acton check`, and `acton fmt --check`.
+2. Run the deployment script locally in the emulator first:
+   `acton script scripts/deploy.tolk`.
+3. Connect the dedicated Testnet wallet in MyTonWallet or another TON Connect-compatible wallet, switch the wallet to TON Testnet, and confirm the displayed address is the dedicated test wallet.
+4. Deploy only to Testnet using:
+   `acton script scripts/deploy.tolk --net testnet --tonconnect`.
+5. Record the resulting minter address and verify the on-chain metadata and initial supply (which must be zero).
+6. Mint exactly `1000000000000000000` base units to the confirmed Testnet recipient with:
+   `acton script scripts/mint.tolk --net testnet --tonconnect`.
+7. Verify the minter total supply, recipient Jetton wallet balance, transfers, and unauthorized-mint rejection. Keep the admin enabled during all tests.
+8. Only after every Testnet check and an independent review, consider the irreversible admin-removal script. Never run it merely to complete the initial deployment.
+
+Acton requires at least 1 GRAM for a public-network deployment when using a funded wallet. A TON Center API key in the local `.env` file can help avoid rate limits. Do not commit `.env` or wallet credentials.
+
+
 1. Build and run the contract tests locally/emulator first. The current GitHub Actions run passed build, all tests, static checks, and formatting: https://github.com/qanas72/EmpireCoin-MiniApp/actions/runs/42617222050.
 2. Deploy only to TON Testnet with a dedicated test wallet. Do not use the production treasury wallet for tests.
 3. Mint exactly 10^18 base units on Testnet, then test that the supply is correct.
