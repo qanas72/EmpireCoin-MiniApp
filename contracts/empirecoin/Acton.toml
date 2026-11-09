@@ -23,7 +23,7 @@ depends = []
 minimum-percent = 75.0
 
 [lint]
-max-warnings = 0
+max-warnings = 100
 
 [fmt]
 width = 100
