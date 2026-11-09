@@ -93,3 +93,7 @@ button{font:inherit}
 .admin-user{font-size:11px;overflow-wrap:anywhere}
 .admin-user button{border:1px solid rgba(255,130,130,.35);border-radius:8px;padding:7px 10px;background:rgba(110,30,30,.2);color:#ffb0a8}
 @media(max-width:420px){.admin-fields{grid-template-columns:1fr}}
+
+.admin-add{display:flex;gap:8px;margin:10px 0 14px}
+.admin-add input{flex:1;min-width:0;padding:11px;border:1px solid rgba(126,190,211,.24);border-radius:10px;background:#081521;color:#fff}
+.admin-add button{padding:10px 12px;border:1px solid rgba(213,173,98,.45);border-radius:10px;background:rgba(213,173,98,.14);color:#f3d18a;font-size:12px}
