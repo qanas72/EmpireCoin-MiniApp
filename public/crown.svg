@@ -1,1 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 220"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2b0"/><stop offset=".25" stop-color="#f3c65a"/><stop offset=".52" stop-color="#9b5c12"/><stop offset=".78" stop-color="#ffe59a"/><stop offset="1" stop-color="#824507"/></linearGradient><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8ffff"/><stop offset=".5" stop-color="#19b8f0"/><stop offset="1" stop-color="#073d83"/></linearGradient><filter id="f"><feGaussianBlur stdDeviation="3" result="x"/><feMerge><feMergeNode in="x"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M32 166 18 63 73 111 118 22 166 111 222 63 208 166Z" fill="url(#g)" stroke="#fff0ad" stroke-width="4" stroke-linejoin="round" filter="url(#f)"/><path d="M32 166h176l-10 24q-78 21-156 0Z" fill="url(#g)" stroke="#89520d" stroke-width="4"/><path d="M48 92 74 117 118 37l45 80 29-25-8 58H56Z" fill="#142d50" opacity=".55"/><path d="M32 63 73 111 118 22l48 89 56-48" fill="none" stroke="#fff4c4" stroke-width="5" stroke-linejoin="round"/><g fill="url(#b)" stroke="#e1ffff" stroke-width="2" filter="url(#f)"><path d="m118 76 14 17-14 18-14-18Z"/><path d="m72 119 10 12-10 13-10-13Z"/><path d="m164 119 10 12-10 13-10-13Z"/><circle cx="28" cy="63" r="7"/><circle cx="73" cy="111" r="7"/><circle cx="118" cy="22" r="8"/><circle cx="166" cy="111" r="7"/><circle cx="222" cy="63" r="7"/></g><path d="M48 175q72 19 144 0M60 184q60 15 120 0" fill="none" stroke="#fff0b2" stroke-width="2"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 220" role="img" aria-label="EmpireCoin futuristic royal crown">
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff8d9"/><stop offset=".18" stop-color="#f5d783"/><stop offset=".42" stop-color="#a66b22"/><stop offset=".62" stop-color="#ffe8a3"/><stop offset=".82" stop-color="#b77c2b"/><stop offset="1" stop-color="#604018"/></linearGradient>
+ <linearGradient id="side" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f7d98d"/><stop offset=".48" stop-color="#9d651f"/><stop offset="1" stop-color="#382714"/></linearGradient>
+ <linearGradient id="inner" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#192c3b"/><stop offset=".55" stop-color="#0b1722"/><stop offset="1" stop-color="#263b4a"/></linearGradient>
+ <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9ffff"/><stop offset=".35" stop-color="#65e6ee"/><stop offset="1" stop-color="#187e9b"/></linearGradient>
+ <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5" result="blur"/><feColorMatrix in="blur" type="matrix" values="0 0 0 0 .05 0 0 0 0 .55 0 0 0 0 .72 0 0 0 .5 0" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="goldglow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<path d="M28 61 74 105 119 23 166 105 212 61 199 157H41Z" fill="url(#inner)" stroke="url(#gold)" stroke-width="7" stroke-linejoin="round"/>
+<path d="m28 61 46 44 45-82 47 82 46-44-13 96H41Z" fill="none" stroke="#fff1bd" stroke-opacity=".72" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M42 157h157l-9 27q-69 22-139 0Z" fill="url(#side)" stroke="#f5d88e" stroke-width="3"/>
+<path d="M53 165q66 17 135 0M62 177q58 14 116 0" fill="none" stroke="#fff0bd" stroke-opacity=".75" stroke-width="2"/>
+<path d="M73 106 87 143 119 91 151 143 166 106" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M119 23v-9M28 61l-8-7M212 61l8-7" stroke="#8cecf0" stroke-width="2" stroke-linecap="round" filter="url(#shadow)"/>
+<g fill="url(#cyan)" stroke="#e2ffff" stroke-width="1.8" filter="url(#shadow)">
+ <path d="m119 67 17 20-17 22-17-22Z"/>
+ <path d="m74 112 11 13-11 14-11-14Z"/>
+ <path d="m166 112 11 13-11 14-11-14Z"/>
+ <circle cx="28" cy="61" r="6"/><circle cx="74" cy="105" r="5.5"/><circle cx="119" cy="23" r="7"/><circle cx="166" cy="105" r="5.5"/><circle cx="212" cy="61" r="6"/>
+</g>
+<path d="M43 196h154" stroke="#67dfe8" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M78 202h82" stroke="#d8b36a" stroke-opacity=".65" stroke-width="2" stroke-linecap="round"/>
+<circle cx="31" cy="196" r="2" fill="#74e9ef"/><circle cx="209" cy="196" r="2" fill="#74e9ef"/>
+</svg>
