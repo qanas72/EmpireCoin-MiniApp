@@ -9,15 +9,15 @@ import "../../wrappers/JettonMinter.gen"
 import "../../wrappers/JettonWallet.gen"
 import "../../wrappers/utils"
 
-const JETTON_DEFAULT_NAME = "Acton Sample Jetton"
-const JETTON_DEFAULT_SYMBOL = "ACTON"
-const JETTON_DEFAULT_DESCRIPTION = "Sample jetton deployed from acton-contracts scripts"
-const JETTON_DEFAULT_IMAGE = "https://ton.org/download/ton_symbol.png"
+const JETTON_DEFAULT_NAME = "EmpireCoin"
+const JETTON_DEFAULT_SYMBOL = "EMPC"
+const JETTON_DEFAULT_DESCRIPTION = "EmpireCoin (EMPC), the fixed-supply community token on TON."
+const JETTON_DEFAULT_IMAGE = "https://qanas72.github.io/EmpireCoin-MiniApp/tonconnect-icon.png"
 const JETTON_DEFAULT_DECIMALS = "9"
-const JETTON_DEFAULT_UPDATED_DESCRIPTION = "Sample jetton (metadata updated from acton-contracts scripts)"
+const JETTON_DEFAULT_UPDATED_DESCRIPTION = "EmpireCoin (EMPC), the fixed-supply community token on TON."
 
 const JETTON_DEFAULT_INITIAL_SUPPLY = "0"
-const JETTON_DEFAULT_MINT_AMOUNT = "100000000000"
+const JETTON_DEFAULT_MINT_AMOUNT = "1000000000000000000"
 const JETTON_DEFAULT_TRANSFER_AMOUNT = "10000000000"
 
 struct JettonMetadata {
