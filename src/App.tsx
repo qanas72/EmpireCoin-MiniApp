@@ -30,6 +30,7 @@ function App() {
   const [adminStatus, setAdminStatus] = useState<'checking' | 'ready' | 'denied' | 'error'>('checking')
   const [adminSaving, setAdminSaving] = useState(false)
   const [adminMessage, setAdminMessage] = useState('')
+  const [newAdminId, setNewAdminId] = useState('')
 
   useEffect(() => {
     const webApp = window.Telegram?.WebApp
@@ -152,7 +153,7 @@ function App() {
             </div>
             <button className="gold-button" disabled={adminSaving} onClick={async()=>{setAdminSaving(true);setAdminMessage('');try{const saved=await adminRequest('update_mining',adminData.mining);setAdminData({...adminData,mining:saved.mining});setAdminMessage('Settings saved.')}catch(err){setAdminMessage(err instanceof Error?err.message:'Save failed.')}finally{setAdminSaving(false)}}}>{adminSaving?'Saving…':'Save settings'}</button>
             {adminMessage && <div className="notice">{adminMessage}</div>}
-            {adminData.admin.can_manage_admins && <><h3>Administrator accounts</h3>{(adminData.admins||[]).map((a:any)=><div className="admin-user" key={a.telegram_user_id}><span>{a.role.toUpperCase()} · {a.telegram_user_id} · {a.is_active?'Active':'Inactive'}</span>{a.role==='admin' && a.is_active && <button onClick={async()=>{try{await adminRequest('deactivate_admin',{telegram_user_id:String(a.telegram_user_id)});setAdminData({...adminData,admins:adminData.admins.map((x:any)=>x.telegram_user_id===a.telegram_user_id?{...x,is_active:false}:x)})}catch(err){setAdminMessage(err instanceof Error?err.message:'Action failed.')}}}>Deactivate</button>}</div>)}</>}
+            {adminData.admin.can_manage_admins && <><h3>Administrator accounts</h3><div className="admin-add"><input inputMode="numeric" placeholder="Telegram numeric ID" value={newAdminId} onChange={e=>setNewAdminId(e.target.value)} /><button onClick={async()=>{try{await adminRequest('add_admin',{telegram_user_id:newAdminId});setNewAdminId('');const refreshed=await adminRequest('dashboard');setAdminData(refreshed);setAdminMessage('Administrator added.')}catch(err){setAdminMessage(err instanceof Error?err.message:'Could not add admin.')}}}>Add administrator</button></div>{(adminData.admins||[]).map((a:any)=><div className="admin-user" key={a.telegram_user_id}><span>{a.role.toUpperCase()} · {a.telegram_user_id} · {a.is_active?'Active':'Inactive'}</span>{a.role==='admin' && a.is_active && <button onClick={async()=>{try{await adminRequest('deactivate_admin',{telegram_user_id:String(a.telegram_user_id)});setAdminData({...adminData,admins:adminData.admins.map((x:any)=>x.telegram_user_id===a.telegram_user_id?{...x,is_active:false}:x)})}catch(err){setAdminMessage(err instanceof Error?err.message:'Action failed.')}}}>Deactivate</button>}</div>)}</>}
           </>}
         </div>}
       </section>
