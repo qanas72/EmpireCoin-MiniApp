@@ -28,6 +28,18 @@ jobs:
       - name: Run Jetton test suite
         working-directory: contracts/empirecoin
         run: acton test tests
+      - name: Exercise Testnet deployment script in local emulator
+        working-directory: contracts/empirecoin
+        env:
+          JETTON_DEPLOYER: ci-deployer
+          JETTON_ADMIN_ADDRESS: 0QBa9SNhRIiPFJZRt3FROllgc70DOBmdLTKV9dxsTl2H2B4D
+          JETTON_NAME: EmpireCoin
+          JETTON_SYMBOL: EMPC
+          JETTON_DESCRIPTION: EmpireCoin CI deployment-script check
+          JETTON_IMAGE: https://qanas72.github.io/EmpireCoin-MiniApp/tonconnect-icon.png
+          JETTON_DECIMALS: "9"
+          JETTON_INITIAL_SUPPLY: "0"
+        run: acton script scripts/deploy.tolk
       - name: Check and format
         working-directory: contracts/empirecoin
         run: |
