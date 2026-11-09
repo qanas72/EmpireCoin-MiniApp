@@ -1,0 +1,36 @@
+name: EmpireCoin Jetton contract checks
+
+on:
+  push:
+    paths:
+      - "contracts/empirecoin/**"
+      - ".github/workflows/jetton-contract-tests.yml"
+  pull_request:
+    paths:
+      - "contracts/empirecoin/**"
+      - ".github/workflows/jetton-contract-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Acton
+        run: |
+          curl -LsSf https://github.com/ton-blockchain/acton/releases/latest/download/acton-installer.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+      - name: Build Jetton contracts
+        working-directory: contracts/empirecoin
+        run: acton build
+      - name: Run Jetton test suite
+        working-directory: contracts/empirecoin
+        run: acton test tests
+      - name: Check and format
+        working-directory: contracts/empirecoin
+        run: |
+          acton check
+          acton fmt --check
