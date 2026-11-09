@@ -20,9 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Acton
-        run: |
-          curl -LsSf https://github.com/ton-blockchain/acton/releases/latest/download/acton-installer.sh | sh
-          echo "$HOME/.acton/bin" >> "$GITHUB_PATH"
+        uses: ton-blockchain/setup-acton@0f9f436843d740466cae2d7411ff59072dde942e
+        with:
+          version: "1.2.1"
+          architecture: x86_64
+          platform: linux
       - name: Build Jetton contracts
         working-directory: contracts/empirecoin
         run: acton build --output-boc build/boc --output-sources build/sources
