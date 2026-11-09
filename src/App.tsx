@@ -106,6 +106,14 @@ function App() {
     const verifyConnectedWallet = async () => {
       const item = wallet?.connectItems?.tonProof
       if (!wallet) return
+      // The ownership challenge endpoint is Mainnet-only. A Testnet wallet is
+      // used only for the isolated deployment test and must not be verified as Mainnet.
+      if (wallet.account.chain === '-3') {
+        setVerifiedWallet(null)
+        setWalletProofStatus('idle')
+        setWalletProofMessage('Testnet wallet connected. Mainnet ownership verification is skipped during Testnet deployment.')
+        return
+      }
       if (!item || !('proof' in item)) {
         try {
           const statusResult = await walletRequest('status')
