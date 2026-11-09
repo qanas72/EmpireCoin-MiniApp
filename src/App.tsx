@@ -1,7 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TonConnectButton, useTonWallet } from '@tonconnect/ui-react'
 
 type Section = 'home' | 'tasks' | 'referrals' | 'wallet' | 'profile'
+
+declare global {
+  interface Window {
+    Telegram?: { WebApp?: { initData?: string; ready?: () => void; expand?: () => void } }
+  }
+}
+
+const SUPABASE_URL = 'https://hxmkdnuqphvkxdxgwrrb.supabase.co'
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_2OFnM9_zBht8PbOvv5anaQ_1yaJmv--'
 
 const navItems: { id: Section; label: string; icon: string }[] = [
   { id: 'home', label: 'Home', icon: '⌂' },
@@ -14,6 +23,37 @@ const navItems: { id: Section; label: string; icon: string }[] = [
 function App() {
   const [section, setSection] = useState<Section>('home')
   const wallet = useTonWallet()
+  const [telegramStatus, setTelegramStatus] = useState<'checking' | 'verified' | 'unavailable' | 'error'>('checking')
+  const [telegramUser, setTelegramUser] = useState<{ id: number; username: string | null; firstName: string | null } | null>(null)
+
+  useEffect(() => {
+    const webApp = window.Telegram?.WebApp
+    if (!webApp?.initData) {
+      setTelegramStatus('unavailable')
+      return
+    }
+    webApp.ready?.()
+    webApp.expand?.()
+    let cancelled = false
+    fetch(`${SUPABASE_URL}/functions/v1/telegram-auth`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+      },
+      body: JSON.stringify({ initData: webApp.initData }),
+    })
+      .then(async (res) => {
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Telegram verification failed')
+        if (!cancelled) {
+          setTelegramUser(data.telegramUser)
+          setTelegramStatus('verified')
+        }
+      })
+      .catch(() => { if (!cancelled) setTelegramStatus('error') })
+    return () => { cancelled = true }
+  }, [])
   const walletAddress = wallet?.account.address
   const shortAddress = walletAddress ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-6)}` : ''
 
@@ -74,7 +114,7 @@ function App() {
         {section === 'tasks' && <div className="feature-panel"><span className="feature-icon">▤</span><span className="eyebrow">EMPIRE MARKETPLACE</span><h2>Tasks & campaigns</h2><p>Discover community campaigns, complete verified tasks, or create your own promotion.</p><div className="notice">Task rewards and campaign payments are not active yet. They will be enabled after backend and anti-fraud checks are ready.</div><button className="gold-button" disabled>Coming soon</button></div>}
         {section === 'referrals' && <div className="feature-panel"><span className="feature-icon">♧</span><span className="eyebrow">GROW THE EMPIRE</span><h2>Invite & earn</h2><p>Your personal invitation link and referral history will appear here.</p><div className="notice">Referral rewards will only be credited after membership and wallet verification are confirmed by the server.</div><button className="gold-button" disabled>Referral link coming soon</button></div>}
         {section === 'wallet' && <div className="feature-panel"><span className="feature-icon">◇</span><span className="eyebrow">TON CONNECT</span><h2>Connect your wallet</h2><p>Use your own TON-compatible wallet. EmpireCoin will never ask for your seed phrase or private key.</p><div className="notice">Connect your own TON wallet securely. The app never receives your seed phrase or private key. Connecting a wallet does not deposit funds or activate paid features.</div><TonConnectButton />{wallet && <p className="wallet-address">Connected: {shortAddress}</p>}</div>}
-        {section === 'profile' && <div className="feature-panel"><span className="feature-icon">◉</span><span className="eyebrow">MEMBER AREA</span><h2>Your Empire ID</h2><p>Your verified Telegram profile, membership status, and account activity will appear here.</p><div className="notice">This preview does not yet read Telegram identity. Server-side Telegram validation will be added before account features go live.</div></div>}
+        {section === 'profile' && <div className="feature-panel"><span className="feature-icon">◉</span><span className="eyebrow">MEMBER AREA</span><h2>Your Empire ID</h2><p>Your verified Telegram profile, membership status, and account activity will appear here.</p><div className="notice">{telegramStatus === 'verified' && telegramUser ? `Telegram verified: ${telegramUser.firstName || 'Member'} · ID ${telegramUser.id}` : telegramStatus === 'checking' ? 'Verifying your Telegram account securely…' : telegramStatus === 'unavailable' ? 'Open EmpireCoin from the official Telegram bot to verify your account.' : 'Telegram verification is not configured yet. Please try again later.'}</div></div>}
       </section>
 
       <nav className="bottom-nav" aria-label="Main navigation">
