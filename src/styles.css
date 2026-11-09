@@ -82,3 +82,14 @@ button{font:inherit}
 .referral-boost{width:100%;display:flex;align-items:center;gap:12px;text-align:left;margin-top:15px;padding:13px;border:1px solid rgba(65,219,144,.28);border-radius:10px;background:linear-gradient(100deg,rgba(13,71,56,.36),rgba(7,25,34,.55));color:#e8fff3;cursor:pointer}
 .referral-boost>span:first-child{font-size:24px;color:#62e9a2}.referral-boost>span:nth-child(2){display:flex;flex-direction:column;gap:5px;flex:1}.referral-boost b{font-size:11px}.referral-boost small{font-size:9px;color:#91bba8}.referral-boost em{font-size:23px;color:#62e9a2;font-style:normal}
 .footer-crown{width:17px;height:17px;vertical-align:middle;object-fit:contain}
+
+
+.admin-panel h3{margin:24px 0 12px;color:#f2d28b;font-size:15px;letter-spacing:.04em}
+.admin-toggle,.admin-user{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;margin:8px 0;border:1px solid rgba(126,190,211,.18);border-radius:12px;background:rgba(12,27,40,.72);color:#e8edf2;font-size:13px}
+.admin-toggle input{width:20px;height:20px;accent-color:#d5ad62}
+.admin-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.admin-fields label{display:flex;flex-direction:column;gap:7px;color:#9fb1c0;font-size:11px}
+.admin-fields input{width:100%;min-width:0;box-sizing:border-box;padding:11px;border:1px solid rgba(126,190,211,.24);border-radius:10px;background:#081521;color:#fff;font:inherit}
+.admin-user{font-size:11px;overflow-wrap:anywhere}
+.admin-user button{border:1px solid rgba(255,130,130,.35);border-radius:8px;padding:7px 10px;background:rgba(110,30,30,.2);color:#ffb0a8}
+@media(max-width:420px){.admin-fields{grid-template-columns:1fr}}
