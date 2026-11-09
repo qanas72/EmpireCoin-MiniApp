@@ -36,6 +36,6 @@
         }, 10000);
       })();
     </script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx" onerror="var p=document.getElementById('boot-status');if(p)p.textContent='EmpireCoin could not load app bundle: '+this.src+' · Please send this message to support.'"></script>
   </body>
 </html>
