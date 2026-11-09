@@ -6,6 +6,13 @@ let telegramInitData = '';
 let telegramVerified = false;
 let tonUI = null;
 let proofBusy = false;
+let verifiedWallet = null;
+
+function setVerifyButtonVisible(visible) {
+  const button = $('verify-wallet-button');
+  button.classList.toggle('hidden', !visible);
+  button.disabled = !visible || proofBusy;
+}
 
 const showError = (message) => {
   const el = $('app-error');
@@ -83,13 +90,16 @@ async function loadVerifiedWallet() {
   try {
     const result = await walletApi('status');
     const saved = result.wallet;
-    if (saved?.verified) {
+    verifiedWallet = saved?.verified ? saved : null;
+    if (verifiedWallet) {
       $('wallet-status').textContent = 'Previously verified wallet: ' + saved.wallet_address + ' · TON Mainnet.';
       $('wallet-verification').textContent = 'Wallet ownership verified';
       $('wallet-verification').classList.remove('hidden');
-      return saved;
+      setVerifyButtonVisible(false);
+      return verifiedWallet;
     }
     $('wallet-verification').classList.add('hidden');
+    setVerifyButtonVisible(true);
     return null;
   } catch (error) {
     showError('Wallet status: ' + (error?.message || String(error)));
@@ -105,10 +115,12 @@ async function verifyConnectedWallet(wallet) {
     if (saved && connectedAddress === saved.wallet_address && wallet?.account?.chain === MAINNET_CHAIN) {
       $('wallet-verification').textContent = 'Wallet ownership verified';
       $('wallet-verification').classList.remove('hidden');
+      setVerifyButtonVisible(false);
       setStatus('wallet-status', 'Verified TON Mainnet wallet: ' + saved.wallet_address);
     } else {
       $('wallet-verification').classList.add('hidden');
-      setStatus('wallet-status', 'Wallet is connected, but ownership is not verified yet. Tap “Verify wallet ownership” below and reconnect.');
+      setVerifyButtonVisible(true);
+      setStatus('wallet-status', 'This connected wallet is not the verified TON Mainnet wallet. Connect your verified wallet, or verify this wallet.');
     }
     return;
   }
@@ -122,20 +134,23 @@ async function verifyConnectedWallet(wallet) {
       public_key: wallet.account.publicKey,
       proof: { ...item.proof, state_init: wallet.account.walletStateInit }
     });
+    verifiedWallet = result.wallet;
     $('wallet-verification').textContent = 'Wallet ownership verified';
     $('wallet-verification').classList.remove('hidden');
+    setVerifyButtonVisible(false);
     setStatus('wallet-status', 'Verified TON Mainnet wallet: ' + result.wallet.wallet_address);
     $('account-note').textContent = 'Telegram identity and TON Mainnet wallet are securely linked.';
     clearError();
   } catch (error) {
     $('wallet-verification').classList.add('hidden');
+    setVerifyButtonVisible(true);
     setStatus('wallet-status', 'Wallet ownership verification failed.');
     showError('Wallet proof: ' + (error?.message || String(error)));
   }
 }
 
 async function reconnectForProof() {
-  if (!telegramVerified || !tonUI || proofBusy) return;
+  if (!telegramVerified || !tonUI || proofBusy || verifiedWallet) return;
   proofBusy = true;
   $('verify-wallet-button').disabled = true;
   clearError();
@@ -147,7 +162,7 @@ async function reconnectForProof() {
     showError('Reconnect: ' + (error?.message || String(error)));
   } finally {
     proofBusy = false;
-    $('verify-wallet-button').disabled = false;
+    setVerifyButtonVisible(!verifiedWallet);
   }
 }
 
@@ -161,7 +176,14 @@ async function startWallet() {
     tonUI.onStatusChange(async (wallet) => {
       if (!wallet) {
         setStatus('wallet-status', telegramVerified ? 'No TON Mainnet wallet connected.' : 'Verify Telegram first to link a wallet.');
-        $('wallet-verification').classList.add('hidden');
+        if (verifiedWallet) {
+          $('wallet-verification').textContent = 'Previously verified TON Mainnet wallet: ' + verifiedWallet.wallet_address;
+          $('wallet-verification').classList.remove('hidden');
+          setVerifyButtonVisible(false);
+        } else {
+          $('wallet-verification').classList.add('hidden');
+          setVerifyButtonVisible(telegramVerified);
+        }
         return;
       }
       const address = wallet.account?.address || 'Address unavailable';
@@ -172,7 +194,7 @@ async function startWallet() {
       await loadVerifiedWallet();
       await prepareWalletProof();
       $('verify-wallet-button').classList.remove('hidden');
-      $('verify-wallet-button').disabled = false;
+      setVerifyButtonVisible(!verifiedWallet);
     } else {
       setStatus('wallet-status', 'Wallet connection is available after Telegram verification.');
       $('verify-wallet-button').classList.add('hidden');
