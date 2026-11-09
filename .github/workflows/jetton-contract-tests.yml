@@ -1,6 +1,7 @@
 name: EmpireCoin Jetton contract checks
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "contracts/empirecoin/**"
