@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f3e9">
+<meta name="description" content="EmpireCoin — the royal digital economy">
+<title>EmpireCoin · New Mini App</title>
+<link rel="manifest" href="./site.webmanifest">
+<link rel="stylesheet" href="./styles.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<div class="shell">
+<header class="topbar"><div class="brand"><span class="crown">♛</span><span>EMPIRE<span class="gold">COIN</span></span></div><span class="network">TON ECOSYSTEM</span></header>
+<main>
+<section class="hero"><p class="eyebrow">THE NEXT DIGITAL ECONOMY</p><h1>Your empire<br><span>starts here.</span></h1><p class="sub">Earn. Build. Rise.</p>
+<div class="balance"><div class="balance-head"><span>EMPC ACCOUNT</span><span class="tag">PREVIEW</span></div><div class="amount">— <small>EMPC</small></div><p id="account-note">Connect your Telegram account to load your profile.</p></div>
+</section>
+<section class="panel"><div class="panel-title"><span class="icon">◈</span><div><p class="eyebrow">ACCOUNT CONNECTION</p><h2 id="telegram-title">Telegram status</h2></div></div><p id="telegram-status" class="status">Checking Telegram environment…</p><div id="user-card" class="user-card hidden"></div></section>
+<section class="panel"><div class="panel-title"><span class="icon">◇</span><div><p class="eyebrow">TON BLOCKCHAIN</p><h2>Connect wallet</h2></div></div><div id="ton-connect"></div><p id="wallet-status" class="status">Wallet connection will be available here.</p></section>
+<section class="grid"><article class="tile"><span>✦</span><b>Earn EMPC</b><small>Activity rewards</small></article><article class="tile"><span>♧</span><b>Invite friends</b><small>Referral program</small></article><article class="tile"><span>▤</span><b>Tasks</b><small>Campaigns & tasks</small></article></section>
+<div id="app-error" class="error hidden" role="alert"></div>
+</main>
+<footer>EMPIRECOIN <span>·</span> NEW MINI APP <span>·</span> v2</footer>
+</div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
