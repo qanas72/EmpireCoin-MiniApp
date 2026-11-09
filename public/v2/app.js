@@ -158,7 +158,6 @@ async function startWallet() {
       manifestUrl: new URL('./tonconnect-manifest.json', window.location.href).href,
       buttonRootId: 'ton-connect'
     });
-    // Network is enforced by the wallet-proof verifier below; this UI build does not expose setConnectionNetwork().
     tonUI.onStatusChange(async (wallet) => {
       if (!wallet) {
         setStatus('wallet-status', telegramVerified ? 'No TON Mainnet wallet connected.' : 'Verify Telegram first to link a wallet.');
