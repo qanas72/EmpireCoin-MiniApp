@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { TonConnectButton, useTonWallet } from '@tonconnect/ui-react'
 
 type Section = 'home' | 'tasks' | 'referrals' | 'wallet' | 'profile'
 
@@ -12,6 +13,9 @@ const navItems: { id: Section; label: string; icon: string }[] = [
 
 function App() {
   const [section, setSection] = useState<Section>('home')
+  const wallet = useTonWallet()
+  const walletAddress = wallet?.account.address
+  const shortAddress = walletAddress ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-6)}` : ''
 
   const title = {
     home: 'Your empire starts here',
@@ -55,7 +59,7 @@ function App() {
           <>
             <div className="section-heading"><div><span className="eyebrow">YOUR CONTROL CENTER</span><h2>Empire overview</h2></div><span className="live-label">● PREVIEW</span></div>
             <div className="stats-grid">
-              <article className="stat-card"><span className="stat-icon">◈</span><span className="muted-label">Wallet status</span><strong>Not connected</strong><small>Connect your TON wallet</small></article>
+              <article className="stat-card"><span className="stat-icon">◈</span><span className="muted-label">Wallet status</span><strong>{wallet ? 'Connected' : 'Not connected'}</strong><small>{wallet ? shortAddress : 'Connect your TON wallet'}</small></article>
               <article className="stat-card"><span className="stat-icon">✦</span><span className="muted-label">Daily earning</span><strong>Coming soon</strong><small>Reward rules not activated</small></article>
             </div>
             <div className="section-heading compact"><div><span className="eyebrow">EXPLORE</span><h2>Empire services</h2></div></div>
@@ -69,7 +73,7 @@ function App() {
 
         {section === 'tasks' && <div className="feature-panel"><span className="feature-icon">▤</span><span className="eyebrow">EMPIRE MARKETPLACE</span><h2>Tasks & campaigns</h2><p>Discover community campaigns, complete verified tasks, or create your own promotion.</p><div className="notice">Task rewards and campaign payments are not active yet. They will be enabled after backend and anti-fraud checks are ready.</div><button className="gold-button" disabled>Coming soon</button></div>}
         {section === 'referrals' && <div className="feature-panel"><span className="feature-icon">♧</span><span className="eyebrow">GROW THE EMPIRE</span><h2>Invite & earn</h2><p>Your personal invitation link and referral history will appear here.</p><div className="notice">Referral rewards will only be credited after membership and wallet verification are confirmed by the server.</div><button className="gold-button" disabled>Referral link coming soon</button></div>}
-        {section === 'wallet' && <div className="feature-panel"><span className="feature-icon">◇</span><span className="eyebrow">TON CONNECT</span><h2>Connect your wallet</h2><p>Use your own TON-compatible wallet. EmpireCoin will never ask for your seed phrase or private key.</p><div className="notice">Wallet connection will be enabled after the official TON Connect manifest and secure backend are configured.</div><button className="gold-button" disabled>Wallet connection coming soon</button></div>}
+        {section === 'wallet' && <div className="feature-panel"><span className="feature-icon">◇</span><span className="eyebrow">TON CONNECT</span><h2>Connect your wallet</h2><p>Use your own TON-compatible wallet. EmpireCoin will never ask for your seed phrase or private key.</p><div className="notice">Connect your own TON wallet securely. The app never receives your seed phrase or private key. Connecting a wallet does not deposit funds or activate paid features.</div><TonConnectButton />{wallet && <p className="wallet-address">Connected: {shortAddress}</p>}</div>}
         {section === 'profile' && <div className="feature-panel"><span className="feature-icon">◉</span><span className="eyebrow">MEMBER AREA</span><h2>Your Empire ID</h2><p>Your verified Telegram profile, membership status, and account activity will appear here.</p><div className="notice">This preview does not yet read Telegram identity. Server-side Telegram validation will be added before account features go live.</div></div>}
       </section>
 
