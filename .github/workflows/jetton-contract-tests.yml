@@ -31,6 +31,9 @@ jobs:
       - name: Run Jetton test suite
         working-directory: contracts/empirecoin
         run: acton test tests
+      - name: Preview deterministic Mainnet minter address without broadcasting
+        working-directory: contracts/empirecoin
+        run: acton script scripts/preview-mainnet.tolk
       - name: Exercise Testnet deployment script in local emulator
         working-directory: contracts/empirecoin
         env:
