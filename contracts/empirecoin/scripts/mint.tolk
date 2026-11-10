@@ -2,14 +2,15 @@ import "@acton/emulation/network"
 import "@acton/emulation/scripts"
 import "utils/common"
 import "../wrappers/utils"
+import "../wrappers/JettonMinter.gen"
+import "../contracts/storage"
 
-const EMPC_TREASURY_ADDRESS = "UQBGbzaKDO0j_gddN5qguj15BrI6L9_VGcnUT0xP6rGXK7KT"
 const EMPC_TOTAL_SUPPLY_BASE_UNITS = 1000000000000000000
 
 fun main() {
     val admin = promptJettonWallet("JETTON_ADMIN", "Select Jetton Admin ActonWallet");
     val minter = promptJettonMinter("Enter Jetton Minter address");
-    val treasury = parseAddress(EMPC_TREASURY_ADDRESS);
+    val treasury = empcTreasuryAddress();
     val recipient = promptJettonAddress(
         "JETTON_MINT_RECIPIENT",
         "Confirm EMPC treasury recipient",
@@ -31,23 +32,23 @@ fun main() {
     assert (mintAmount == EMPC_TOTAL_SUPPLY_BASE_UNITS) throw 0xE106;
 
     val metadata = OnchainMetadataReply.fromCell(before.jettonContent);
-    assert (
-        readOnchainMetadataField(metadata, "name".sha256()) == "EmpireCoin"
-    ) throw 0xE107;
-    assert (
-        readOnchainMetadataField(metadata, "symbol".sha256()) == "EMPC"
-    ) throw 0xE108;
-    assert (
-        readOnchainMetadataField(metadata, "decimals".sha256()) == "9"
-    ) throw 0xE109;
+    val name = readOnchainMetadataField(metadata, "name".sha256());
+    val symbol = readOnchainMetadataField(metadata, "symbol".sha256());
+    val decimals = readOnchainMetadataField(metadata, "decimals".sha256());
+    assert (name != null) throw 0xE107;
+    assert (name! == "EmpireCoin") throw 0xE108;
+    assert (symbol != null) throw 0xE109;
+    assert (symbol! == "EMPC") throw 0xE10A;
+    assert (decimals != null) throw 0xE10B;
+    assert (decimals! == "9") throw 0xE10C;
 
     val res = minter.sendMint(admin.address, recipient, mintAmount, 1, grams("0.08"));
     res.waitForFirstTransaction();
 
     val after = minter.getJettonData();
-    assert (after.totalSupply == EMPC_TOTAL_SUPPLY_BASE_UNITS) throw 0xE10A;
-    assert (after.adminAddress != null) throw 0xE10B;
-    assert (after.adminAddress! == admin.address) throw 0xE10C;
+    assert (after.totalSupply == EMPC_TOTAL_SUPPLY_BASE_UNITS) throw 0xE10D;
+    assert (after.adminAddress != null) throw 0xE10E;
+    assert (after.adminAddress! == admin.address) throw 0xE10F;
 
     printJettonMinterInfo(minter, "EMPC_MINTED");
     printJettonWalletInfo(minter, recipient, "EMPC_TREASURY");
