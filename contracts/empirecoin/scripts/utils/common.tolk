@@ -79,19 +79,15 @@ fun promptJettonMinter(message: string): JettonMinter {
 
 fun promptJettonMetadata(descriptionDefault: string): JettonMetadata {
     return {
-        name: promptJettonString("JETTON_NAME", "Enter jetton name", JETTON_DEFAULT_NAME),
-        symbol: promptJettonString("JETTON_SYMBOL", "Enter jetton symbol", JETTON_DEFAULT_SYMBOL),
+        name: JETTON_DEFAULT_NAME,
+        symbol: JETTON_DEFAULT_SYMBOL,
         description: promptJettonString(
             "JETTON_DESCRIPTION",
             "Enter jetton description",
             descriptionDefault,
         ),
         image: promptJettonString("JETTON_IMAGE", "Enter jetton image URL", JETTON_DEFAULT_IMAGE),
-        decimals: promptJettonString(
-            "JETTON_DECIMALS",
-            "Enter jetton decimals",
-            JETTON_DEFAULT_DECIMALS,
-        ),
+        decimals: JETTON_DEFAULT_DECIMALS,
     };
 }
 
@@ -111,11 +107,7 @@ fun buildJettonMetadataCell(info: JettonMetadata): cell {
 
 fun promptJettonMinterStorage(admin: address): MinterStorage {
     return {
-        totalSupply: promptJettonCoins(
-            "JETTON_INITIAL_SUPPLY",
-            "Enter initial supply",
-            JETTON_DEFAULT_INITIAL_SUPPLY,
-        ),
+        totalSupply: 0,
         adminAddress: admin,
         nextAdminAddress: null,
         metadata: buildJettonMetadataCell(promptJettonMetadata(JETTON_DEFAULT_DESCRIPTION)),
