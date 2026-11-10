@@ -20,6 +20,10 @@ const JETTON_DEFAULT_INITIAL_SUPPLY = "0"
 const JETTON_DEFAULT_MINT_AMOUNT = "1000000000000000000"
 const JETTON_DEFAULT_TRANSFER_AMOUNT = "10000000000"
 
+fun empcTreasuryAddress(): address {
+    return parseAddress("UQBGbzaKDO0j_gddN5qguj15BrI6L9_VGcnUT0xP6rGXK7KT");
+}
+
 struct JettonMetadata {
     name: string
     symbol: string
