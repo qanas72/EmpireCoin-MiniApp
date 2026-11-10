@@ -11,6 +11,7 @@ fun main() {
     val admin = promptJettonWallet("JETTON_ADMIN", "Select Jetton Admin ActonWallet");
     val minter = promptJettonMinter("Enter Jetton Minter address");
     val treasury = empcTreasuryAddress();
+    assert (admin.address == treasury) throw 0xE110;
     val recipient = promptJettonAddress(
         "JETTON_MINT_RECIPIENT",
         "Confirm EMPC treasury recipient",
