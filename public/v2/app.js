@@ -1,6 +1,8 @@
 const SUPABASE_URL='https://hxmkdnuqphvkxdxgwrrb.supabase.co';
 const SUPABASE_KEY='sb_publishable_2OFnM9_zBht8PbOvv5anaQ_1yaJmv--';
 const MAINNET_CHAIN='-239';
+const TESTNET_CHAIN='-3';
+let selectedNetwork=MAINNET_CHAIN;
 const $=id=>document.getElementById(id);
 let initData='',telegramUser=null,telegramVerified=false,tonUI=null,verifiedWallet=null,adminData=null,proofBusy=false,toastTimer=null;
 
@@ -20,7 +22,7 @@ async function postFunction(name,body){
  if(!r.ok||data.error)throw new Error(data.error||('Request failed ('+r.status+')'));
  return data;
 }
-async function walletApi(action,extra={}){if(!initData)throw new Error('Open the Mini App from @EmpireCoinOfficialBot.');return postFunction('ton-wallet-auth',{action,initData,...extra})}
+async function walletApi(action,extra={}){if(!initData)throw new Error('Open the Mini App from @EmpireCoinOfficialBot.');return postFunction('ton-wallet-auth',{action,initData,network:selectedNetwork,...extra})}
 async function adminApi(action,payload={}){if(!initData)throw new Error('Telegram session unavailable.');return postFunction('admin-api',{action,initData,payload})}
 
 async function startTelegram(){
@@ -43,9 +45,9 @@ async function loadVerifiedWallet(){
  const result=await walletApi('status');const saved=result.wallet;
  verifiedWallet=saved?.verified?saved:null;
  if(verifiedWallet){
-  $('wallet-verification').classList.remove('hidden');$('verified-address').textContent=verifiedWallet.wallet_address+' · TON Mainnet';
+  $('wallet-verification').classList.remove('hidden');$('verified-address').textContent=verifiedWallet.wallet_address+' · '+(selectedNetwork===MAINNET_CHAIN?'TON Mainnet':'TON Testnet');
   $('home-wallet').textContent=shortAddress(verifiedWallet.wallet_address);$('profile-wallet').textContent=shortAddress(verifiedWallet.wallet_address);
-  $('wallet-status').textContent='Your TON Mainnet wallet ownership is verified.';
+  $('wallet-status').textContent='Your '+(selectedNetwork===MAINNET_CHAIN?'TON Mainnet':'TON Testnet')+' wallet ownership is verified.';
   setVerifyButton(false);
  }else{
   $('wallet-verification').classList.add('hidden');$('home-wallet').textContent='Not connected';$('profile-wallet').textContent='Not connected';
@@ -56,13 +58,13 @@ async function loadVerifiedWallet(){
 async function prepareWalletProof(){
  if(!telegramVerified||!tonUI||verifiedWallet)return;
  tonUI.setConnectRequestParameters({state:'loading'});
- try{const result=await walletApi('payload');tonUI.setConnectRequestParameters({state:'ready',value:{tonProof:result.payload}});$('wallet-status').textContent='Secure ownership challenge ready. Connect your TON Mainnet wallet.'}
+ try{const result=await walletApi('payload');tonUI.setConnectRequestParameters({state:'ready',value:{tonProof:result.payload}});$('wallet-status').textContent='Secure ownership challenge ready. Connect your '+(selectedNetwork===MAINNET_CHAIN?'TON Mainnet':'TON Testnet')+' wallet.'}
  catch(e){tonUI.setConnectRequestParameters(null);$('wallet-status').textContent='Could not prepare the wallet verification challenge.';showError('Wallet challenge: '+e.message)}
 }
 async function verifyConnectedWallet(wallet){
  const proof=wallet?.connectItems?.tonProof;
  if(!proof||!('proof'in proof)){
-  if(verifiedWallet&&wallet?.account?.address===verifiedWallet.wallet_address&&wallet?.account?.chain===MAINNET_CHAIN){
+  if(verifiedWallet&&wallet?.account?.address===verifiedWallet.wallet_address&&wallet?.account?.chain===selectedNetwork){
    $('wallet-status').textContent='Verified TON Mainnet wallet: '+shortAddress(verifiedWallet.wallet_address);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);
   }else if(!verifiedWallet){$('wallet-status').textContent='Wallet connected. Ownership still needs verification.';setVerifyButton(true)}
   else{$('wallet-status').textContent='A different wallet is connected. Your previously verified wallet remains on your account.';setVerifyButton(false)}
@@ -70,12 +72,12 @@ async function verifyConnectedWallet(wallet){
  }
  if(verifiedWallet){setVerifyButton(false);return}
  try{
-  if(wallet.account.chain!==MAINNET_CHAIN)throw new Error('Please connect your TON Mainnet wallet, not Testnet.');
+  if(wallet.account.chain!==selectedNetwork)throw new Error('Please connect the selected TON network.');
   $('wallet-status').textContent='Verifying wallet signature securely…';
   const result=await walletApi('verify',{address:wallet.account.address,network:wallet.account.chain,public_key:wallet.account.publicKey,proof:{...proof.proof,state_init:wallet.account.walletStateInit}});
-  verifiedWallet=result.wallet;$('wallet-verification').classList.remove('hidden');$('verified-address').textContent=result.wallet.wallet_address+' · TON Mainnet';
+  verifiedWallet=result.wallet;$('wallet-verification').classList.remove('hidden');$('verified-address').textContent=result.wallet.wallet_address+' · '+(selectedNetwork===MAINNET_CHAIN?'TON Mainnet':'TON Testnet');
   $('wallet-status').textContent='Wallet ownership verified successfully.';$('home-wallet').textContent=shortAddress(result.wallet.wallet_address);$('profile-wallet').textContent=shortAddress(result.wallet.wallet_address);
-  setVerifyButton(false);clearError();toast('TON Mainnet wallet verified.');
+  setVerifyButton(false);clearError();toast((selectedNetwork===MAINNET_CHAIN?'TON Mainnet':'TON Testnet')+' wallet verified.');
  }catch(e){$('wallet-status').textContent='Wallet ownership verification failed.';setVerifyButton(!verifiedWallet);showError('Wallet proof: '+e.message)}
 }
 async function reconnectForProof(){
@@ -89,6 +91,7 @@ async function startWallet(){
  try{
   const {TonConnectUI}=await import('https://esm.sh/@tonconnect/ui@2.3.0');
   tonUI=new TonConnectUI({manifestUrl:new URL('./tonconnect-manifest.json',window.location.href).href,buttonRootId:'ton-connect'});
+  tonUI.setConnectionNetwork(selectedNetwork);
   tonUI.onStatusChange(async wallet=>{
    if(!wallet){
     if(verifiedWallet){$('wallet-status').textContent='Verified wallet saved to your account: '+shortAddress(verifiedWallet.wallet_address);$('wallet-verification').classList.remove('hidden');setVerifyButton(false)}
@@ -96,11 +99,11 @@ async function startWallet(){
     return;
    }
    const addr=wallet.account?.address;
-   if(verifiedWallet&&addr===verifiedWallet.wallet_address&&wallet.account?.chain===MAINNET_CHAIN){
+   if(verifiedWallet&&addr===verifiedWallet.wallet_address&&wallet.account?.chain===selectedNetwork){
     $('wallet-status').textContent='Verified TON Mainnet wallet: '+shortAddress(addr);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);return;
    }
    if(verifiedWallet){$('wallet-status').textContent='Another wallet is connected. Your verified wallet remains '+shortAddress(verifiedWallet.wallet_address)+'.';setVerifyButton(false);return}
-   $('wallet-status').textContent='Connected · '+(wallet.account?.chain===MAINNET_CHAIN?'TON Mainnet':'Other network')+' · '+shortAddress(addr);
+   $('wallet-status').textContent='Connected · '+(wallet.account?.chain===MAINNET_CHAIN?'TON Mainnet':wallet.account?.chain===TESTNET_CHAIN?'TON Testnet':'Other network')+' · '+shortAddress(addr);
    if(telegramVerified)await verifyConnectedWallet(wallet);
   });
   if(telegramVerified){await loadVerifiedWallet();if(!verifiedWallet)await prepareWalletProof()}
@@ -149,6 +152,11 @@ async function deactivateAdmin(id){
  catch(e){showError('Deactivate administrator: '+e.message)}
 }
 $('verify-wallet-button').addEventListener('click',reconnectForProof);
+$('wallet-network').addEventListener('change',e=>{selectedNetwork=e.target.value;});
+$('switch-wallet-network').addEventListener('click',async()=>{
+ try{clearError();if(tonUI?.connected)await tonUI.disconnect();tonUI?.setConnectionNetwork(selectedNetwork);verifiedWallet=null;await loadVerifiedWallet();if(!verifiedWallet)await prepareWalletProof();$('wallet-network-label').textContent=selectedNetwork===MAINNET_CHAIN?'TON MAINNET SELECTED':'TON TESTNET SELECTED';toast('Network selection updated.');}
+ catch(e){showError('Network switch: '+e.message)}
+});
 $('save-settings').addEventListener('click',saveMining);$('add-admin').addEventListener('click',addAdmin);
 window.addEventListener('error',e=>{if(e.message)showError('App error: '+e.message)});
 window.addEventListener('unhandledrejection',e=>showError('Startup error: '+(e.reason?.message||String(e.reason))));
