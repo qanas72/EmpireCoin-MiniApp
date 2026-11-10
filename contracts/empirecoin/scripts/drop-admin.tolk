@@ -9,6 +9,7 @@ import "../wrappers/utils"
 fun main() {
     val admin = promptJettonWallet("JETTON_ADMIN", "Select Current Jetton Admin ActonWallet");
     val minter = promptJettonMinter("Enter Jetton Minter address");
+    assert (admin.address == empcTreasuryAddress()) throw 0xE008;
 
     val before = minter.getJettonData();
     assert (before.totalSupply == 1000000000000000000) throw 0xE001;
