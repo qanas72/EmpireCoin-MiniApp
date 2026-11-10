@@ -50,9 +50,11 @@
     </section>
 
     <section id="view-wallet" class="view">
-      <div class="page-heading"><p class="eyebrow">TON BLOCKCHAIN</p><h1>Wallet</h1><p class="muted">Connect and verify ownership of your TON Mainnet wallet.</p></div>
+      <div class="page-heading"><p class="eyebrow">TON BLOCKCHAIN</p><h1>Wallet</h1><p class="muted">Connect and verify ownership of your TON Mainnet or Testnet wallet.</p></div>
       <article class="panel-card">
-        <div class="card-label"><span class="status-dot"></span> TON MAINNET</div>
+        <div class="card-label"><span class="status-dot"></span> <span id="wallet-network-label">TON MAINNET SELECTED</span></div>
+        <label class="setting-row" for="wallet-network"><span>Wallet network</span><select id="wallet-network"><option value="-239">TON Mainnet</option><option value="-3">TON Testnet</option></select></label>
+        <button id="switch-wallet-network" class="wide-button secondary" type="button">Use selected network</button>
         <div id="ton-connect" class="ton-connect"></div>
         <p id="wallet-status" class="muted">Preparing secure wallet connection…</p>
         <div id="wallet-verification" class="verified-banner hidden"><span>✓</span><div><b>Wallet ownership verified</b><small id="verified-address">TON Mainnet</small></div></div>
