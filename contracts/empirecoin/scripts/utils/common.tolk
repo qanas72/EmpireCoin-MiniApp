@@ -114,7 +114,6 @@ fun promptJettonMinterStorage(admin: address): MinterStorage {
     };
 }
 
-
 fun empcMainnetMinterStorage(admin: address): MinterStorage {
     return {
         totalSupply: 0,
