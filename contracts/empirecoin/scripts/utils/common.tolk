@@ -114,6 +114,22 @@ fun promptJettonMinterStorage(admin: address): MinterStorage {
     };
 }
 
+
+fun empcMainnetMinterStorage(admin: address): MinterStorage {
+    return {
+        totalSupply: 0,
+        adminAddress: admin,
+        nextAdminAddress: null,
+        metadata: buildJettonMetadataCell({
+            name: JETTON_DEFAULT_NAME,
+            symbol: JETTON_DEFAULT_SYMBOL,
+            description: JETTON_DEFAULT_DESCRIPTION,
+            image: JETTON_DEFAULT_IMAGE,
+            decimals: JETTON_DEFAULT_DECIMALS,
+        }),
+    };
+}
+
 fun deployJettonMinter(deployer: ActonWallet, storage: MinterStorage): JettonMinter {
     val minter = JettonMinter.fromStorage(storage);
     val res = minter.sendDeploy(deployer.address, { value: grams("0.05") });
