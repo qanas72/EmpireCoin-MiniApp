@@ -65,7 +65,7 @@ async function verifyConnectedWallet(wallet){
  const proof=wallet?.connectItems?.tonProof;
  if(!proof||!('proof'in proof)){
   if(verifiedWallet&&wallet?.account?.address===verifiedWallet.wallet_address&&wallet?.account?.chain===selectedNetwork){
-   $('wallet-status').textContent='Verified TON Mainnet wallet: '+shortAddress(verifiedWallet.wallet_address);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);
+   $('wallet-status').textContent='Verified '+(selectedNetwork===MAINNET_CHAIN?'TON Mainnet':'TON Testnet')+' wallet: '+shortAddress(verifiedWallet.wallet_address);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);
   }else if(!verifiedWallet){$('wallet-status').textContent='Wallet connected. Ownership still needs verification.';setVerifyButton(true)}
   else{$('wallet-status').textContent='A different wallet is connected. Your previously verified wallet remains on your account.';setVerifyButton(false)}
   return;
@@ -91,7 +91,7 @@ async function startWallet(){
  try{
   const {TonConnectUI}=await import('https://esm.sh/@tonconnect/ui@2.3.0');
   tonUI=new TonConnectUI({manifestUrl:new URL('./tonconnect-manifest.json',window.location.href).href,buttonRootId:'ton-connect'});
-  tonUI.setConnectionNetwork(selectedNetwork);
+  tonUI.connector.setConnectionNetwork(selectedNetwork);
   tonUI.onStatusChange(async wallet=>{
    if(!wallet){
     if(verifiedWallet){$('wallet-status').textContent='Verified wallet saved to your account: '+shortAddress(verifiedWallet.wallet_address);$('wallet-verification').classList.remove('hidden');setVerifyButton(false)}
@@ -100,7 +100,7 @@ async function startWallet(){
    }
    const addr=wallet.account?.address;
    if(verifiedWallet&&addr===verifiedWallet.wallet_address&&wallet.account?.chain===selectedNetwork){
-    $('wallet-status').textContent='Verified TON Mainnet wallet: '+shortAddress(addr);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);return;
+    $('wallet-status').textContent='Verified '+(selectedNetwork===MAINNET_CHAIN?'TON Mainnet':'TON Testnet')+' wallet: '+shortAddress(addr);$('wallet-verification').classList.remove('hidden');setVerifyButton(false);return;
    }
    if(verifiedWallet){$('wallet-status').textContent='Another wallet is connected. Your verified wallet remains '+shortAddress(verifiedWallet.wallet_address)+'.';setVerifyButton(false);return}
    $('wallet-status').textContent='Connected · '+(wallet.account?.chain===MAINNET_CHAIN?'TON Mainnet':wallet.account?.chain===TESTNET_CHAIN?'TON Testnet':'Other network')+' · '+shortAddress(addr);
@@ -154,7 +154,7 @@ async function deactivateAdmin(id){
 $('verify-wallet-button').addEventListener('click',reconnectForProof);
 $('wallet-network').addEventListener('change',e=>{selectedNetwork=e.target.value;});
 $('switch-wallet-network').addEventListener('click',async()=>{
- try{clearError();if(tonUI?.connected)await tonUI.disconnect();tonUI?.setConnectionNetwork(selectedNetwork);verifiedWallet=null;await loadVerifiedWallet();if(!verifiedWallet)await prepareWalletProof();$('wallet-network-label').textContent=selectedNetwork===MAINNET_CHAIN?'TON MAINNET SELECTED':'TON TESTNET SELECTED';toast('Network selection updated.');}
+ try{clearError();if(tonUI?.connected)await tonUI.disconnect();tonUI?.connector?.setConnectionNetwork(selectedNetwork);verifiedWallet=null;await loadVerifiedWallet();if(!verifiedWallet)await prepareWalletProof();$('wallet-network-label').textContent=selectedNetwork===MAINNET_CHAIN?'TON MAINNET SELECTED':'TON TESTNET SELECTED';toast('Network selection updated.');}
  catch(e){showError('Network switch: '+e.message)}
 });
 $('save-settings').addEventListener('click',saveMining);$('add-admin').addEventListener('click',addAdmin);
