@@ -1,9 +1,9 @@
 import "@acton/emulation/network"
 import "@acton/emulation/scripts"
 import "utils/common"
-import "../wrappers/utils"
-import "../wrappers/JettonMinter.gen"
 import "../contracts/storage"
+import "../wrappers/JettonMinter.gen"
+import "../wrappers/utils"
 
 const EMPC_TOTAL_SUPPLY_BASE_UNITS = 1000000000000000000
 
