@@ -2,13 +2,119 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="0; url=../?v=empirecoin-fixed-3">
-<title>Opening EmpireCoin</title>
-<style>body{margin:0;background:#090b10;color:#f0d995;font:16px Arial,sans-serif;display:grid;place-items:center;min-height:100vh}a{color:#f0d995}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b10">
+<meta name="description" content="EmpireCoin — the royal digital economy">
+<title>EmpireCoin · Mini App</title>
+<link rel="manifest" href="./site.webmanifest">
+<link rel="stylesheet" href="./styles.css?v=4">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-<p>Opening the updated EmpireCoin app… <a href="../?v=empirecoin-fixed-3">Tap here if it does not open.</a></p>
-<script>location.replace('../?v=empirecoin-fixed-3');</script>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="EmpireCoin home"><span class="brand-mark"><img src="../crown.svg?v=2" alt="EmpireCoin crown"></span><span>EMPIRE<span class="gold">COIN</span><small>THE DIGITAL KINGDOM</small></span></a>
+    <div class="top-actions"><span class="live-dot"></span><span id="session-label">CONNECTING</span><button id="menu-profile" class="avatar" aria-label="Open profile">EC</button></div>
+  </header>
+
+  <main>
+    <section id="view-home" class="view active">
+      <div class="welcome"><p class="eyebrow">WELCOME TO YOUR KINGDOM</p><h1>Build your <span>Empire.</span></h1><p class="muted">One ecosystem. Your activity. Your future.</p></div>
+      <article class="hero-card">
+        <div class="hero-card-top"><span>EMPIRECOIN BALANCE</span><span class="pill neutral" id="balance-state">NOT ACTIVATED</span></div>
+        <div class="balance-number">— <small>EMPC</small></div>
+        <p id="balance-note">Your on-chain and reward balance will appear here when the reward ledger is activated.</p>
+        <div class="hero-divider"></div>
+        <div class="wallet-mini"><span class="wallet-icon">◇</span><div><small>TON MAINNET WALLET</small><strong id="home-wallet">Not connected</strong></div><button class="text-button" data-go="wallet">Manage</button></div>
+      </article>
+      <div class="section-heading"><div><p class="eyebrow">YOUR EMPIRE</p><h2>Quick access</h2></div></div>
+      <div class="quick-grid">
+        <button class="quick-card" data-go="earn"><span class="quick-icon">✦</span><b>Earn EMPC</b><small>Activity rewards</small></button>
+        <button class="quick-card" data-go="referrals"><span class="quick-icon">♧</span><b>Referrals</b><small>Invite your circle</small></button>
+        <button class="quick-card" data-go="tasks"><span class="quick-icon">▤</span><b>Tasks</b><small>Campaigns & tasks</small></button>
+        <button class="quick-card" data-go="profile"><span class="quick-icon">◉</span><b>My profile</b><small>Account details</small></button>
+      </div>
+      <article class="notice-card"><span class="notice-icon">i</span><div><b>Platform status</b><p>Wallet verification is available. Mining, referrals, token balances and rewards remain inactive until their secure engines are deployed.</p></div></article>
+    </section>
+
+    <section id="view-profile" class="view">
+      <div class="page-heading"><p class="eyebrow">ACCOUNT</p><h1>My profile</h1><p class="muted">Your verified Telegram identity and account details.</p></div>
+      <article class="profile-card"><div class="profile-avatar" id="profile-avatar">EC</div><div><h2 id="profile-name">Telegram member</h2><p id="profile-username" class="muted">@username</p><span class="pill neutral" id="profile-role">MEMBER</span></div></article>
+      <div class="detail-list">
+        <div class="detail-row"><span>Telegram ID</span><strong id="profile-id">—</strong></div>
+        <div class="detail-row"><span>Account status</span><strong class="status-good">Verified</strong></div>
+        <div class="detail-row"><span>Membership</span><strong>EmpireCoin member</strong></div>
+        <div class="detail-row"><span>Wallet</span><strong id="profile-wallet">Not connected</strong></div>
+      </div>
+      <button class="wide-button secondary" data-go="wallet">Wallet settings <span>→</span></button>
+    </section>
+
+    <section id="view-wallet" class="view">
+      <div class="page-heading"><p class="eyebrow">TON BLOCKCHAIN</p><h1>Wallet</h1><p class="muted">Connect and verify ownership of your TON Mainnet wallet.</p></div>
+      <article class="panel-card">
+        <div class="card-label"><span class="status-dot"></span> TON MAINNET</div>
+        <div id="ton-connect" class="ton-connect"></div>
+        <p id="wallet-status" class="muted">Preparing secure wallet connection…</p>
+        <div id="wallet-verification" class="verified-banner hidden"><span>✓</span><div><b>Wallet ownership verified</b><small id="verified-address">TON Mainnet</small></div></div>
+        <button id="verify-wallet-button" class="wide-button hidden" type="button">Verify wallet ownership</button>
+        <p class="small-note">Verification uses a TON Connect signature challenge. It does not transfer tokens or request your recovery phrase.</p>
+      </article>
+    </section>
+
+    <section id="view-earn" class="view">
+      <div class="page-heading"><p class="eyebrow">REWARDS ENGINE</p><h1>Earn EMPC</h1><p class="muted">Rewards for genuine activity in the EmpireCoin ecosystem.</p></div>
+      <article class="feature-card"><span class="feature-symbol">✦</span><div><span class="pill warning">COMING SOON</span><h2>Daily activity rewards</h2><p>Mining and reward distribution are currently disabled while the secure reward engine is being completed.</p></div></article>
+      <div class="detail-list"><div class="detail-row"><span>Mining status</span><strong id="earn-status">Not active</strong></div><div class="detail-row"><span>Daily reward</span><strong>Not available yet</strong></div><div class="detail-row"><span>Reward balance</span><strong>Not activated</strong></div></div>
+    </section>
+
+    <section id="view-referrals" class="view">
+      <div class="page-heading"><p class="eyebrow">GROW THE KINGDOM</p><h1>Referrals</h1><p class="muted">Invite friends when the referral programme opens.</p></div>
+      <article class="feature-card"><span class="feature-symbol">♧</span><div><span class="pill warning">COMING SOON</span><h2>Your network starts here</h2><p>Referral tracking and bonus payouts are not active yet. No referral rewards will be promised or credited until the system is ready.</p></div></article>
+      <div class="detail-list"><div class="detail-row"><span>Invited members</span><strong>—</strong></div><div class="detail-row"><span>Referral rewards</span><strong>Not active</strong></div></div>
+    </section>
+
+    <section id="view-tasks" class="view">
+      <div class="page-heading"><p class="eyebrow">CAMPAIGNS</p><h1>Tasks</h1><p class="muted">Verified activities and campaigns will appear here.</p></div>
+      <article class="feature-card"><span class="feature-symbol">▤</span><div><span class="pill warning">COMING SOON</span><h2>No active campaigns</h2><p>Campaign tasks are being prepared. This page will show task rules, progress and confirmed rewards when available.</p></div></article>
+    </section>
+
+    <section id="view-admin" class="view">
+      <div class="page-heading"><p class="eyebrow">RESTRICTED CONTROL</p><h1>Admin console</h1><p class="muted">Server-authorized controls. Access is checked using your Telegram identity.</p></div>
+      <div id="admin-loading" class="muted">Checking administrator permissions…</div>
+      <div id="admin-content" class="hidden">
+        <article class="admin-banner"><span class="pill success" id="admin-role">ADMIN</span><h2>Control centre</h2><p id="admin-id" class="muted"></p></article>
+        <div class="admin-section"><div class="section-heading"><div><p class="eyebrow">REWARD ENGINE</p><h2>Mining settings</h2></div></div>
+          <div class="detail-list admin-settings">
+            <label class="setting-row"><span>Daily base reward (EMPC)</span><input id="cfg-base" type="number" min="0" step="0.1"></label>
+            <label class="setting-row"><span>Referral daily bonus</span><input id="cfg-referral" type="number" min="0" step="0.1"></label>
+            <label class="setting-row"><span>Maximum rewarded referrals</span><input id="cfg-max-referrals" type="number" min="0" step="1"></label>
+            <label class="setting-row"><span>Maximum speed multiplier</span><input id="cfg-speed" type="number" min="1" step="0.1"></label>
+            <label class="setting-row"><span>Per-user daily cap</span><input id="cfg-user-cap" type="number" min="0" step="0.1"></label>
+            <label class="setting-row"><span>Global daily budget</span><input id="cfg-global-cap" type="number" min="0" step="1"></label>
+          </div>
+          <p class="small-note">Saving configuration does not activate mining or distribute rewards. Those switches remain server-controlled and off until the reward engine is ready.</p>
+          <button id="save-settings" class="wide-button">Save reward settings</button>
+        </div>
+        <div class="admin-section" id="admin-management">
+          <div class="section-heading"><div><p class="eyebrow">ACCESS CONTROL</p><h2>Administrators</h2></div></div>
+          <div id="admin-list" class="admin-list"></div>
+          <div class="add-admin"><label for="new-admin-id">Add administrator by Telegram ID</label><input id="new-admin-id" type="number" inputmode="numeric" placeholder="Telegram ID"><button id="add-admin" class="wide-button secondary">Add administrator</button></div>
+        </div>
+      </div>
+    </section>
+    <div id="app-error" class="error-box hidden" role="alert"></div>
+    <div id="toast" class="toast hidden" role="status"></div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button class="nav-item active" data-view="home"><span>⌂</span><small>Home</small></button>
+    <button class="nav-item" data-view="earn"><span>✦</span><small>Earn</small></button>
+    <button class="nav-item" data-view="referrals"><span>♧</span><small>Invite</small></button>
+    <button class="nav-item" data-view="tasks"><span>▤</span><small>Tasks</small></button>
+    <button class="nav-item" data-view="profile"><span>◉</span><small>Profile</small></button>
+    <button class="nav-item hidden" id="admin-nav" data-view="admin"><span>♜</span><small>Admin</small></button>
+  </nav>
+</div>
+<script type="module" src="./app.js?v=empire-dashboard-1"></script>
 </body>
 </html>
