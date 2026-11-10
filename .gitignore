@@ -1,0 +1,15 @@
+# Secrets and local wallet credentials
+.env
+.env.*
+!.env.example
+**/wallets.toml
+**/global.wallets.toml
+
+# Local Acton build outputs and TON Connect sessions
+**/build/
+**/.acton/
+**/sessions/tonconnect/
+
+# Local editor and OS files
+.DS_Store
+.vscode/
