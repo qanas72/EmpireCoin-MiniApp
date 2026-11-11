@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EmpireCoin royal crown">
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2bd"/><stop offset=".18" stop-color="#d89b3e"/><stop offset=".38" stop-color="#fff0a6"/><stop offset=".58" stop-color="#a96822"/><stop offset=".78" stop-color="#f7d77d"/><stop offset="1" stop-color="#8d511d"/></linearGradient>
+ <linearGradient id="side" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff1b4"/><stop offset=".45" stop-color="#bd792b"/><stop offset="1" stop-color="#6e3b1d"/></linearGradient>
+ <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0fa"/><stop offset=".35" stop-color="#ff8fc9"/><stop offset=".72" stop-color="#c72f82"/><stop offset="1" stop-color="#74164e"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#f5b8dc" stop-opacity=".3"/><stop offset="1" stop-color="#f5b8dc" stop-opacity="0"/></radialGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="12"/><feOffset dy="13"/><feComponentTransfer><feFuncA type="linear" slope=".45"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="shine"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<circle cx="256" cy="250" r="224" fill="url(#glow)"/>
+<g filter="url(#shadow)" stroke="#70431e" stroke-width="8" stroke-linejoin="round">
+ <path d="M83 170 166 230 213 91 256 211 299 91 346 230 429 170 397 361 115 361Z" fill="url(#gold)"/>
+ <path d="M83 170 166 230 213 91 256 211 299 91 346 230 429 170 397 361 115 361Z" fill="none" stroke="#fff0b3" stroke-width="5" opacity=".8"/>
+ <path d="M115 361h282l-14 62H129Z" fill="url(#side)"/>
+ <path d="M129 423h254l-17 31H146Z" fill="url(#gold)"/>
+ <path d="M166 230 213 91l43 120 43-120 47 139-90 52Z" fill="#fff0b3" opacity=".16" stroke="none"/>
+ <path d="M104 188 166 238l-32 102h-14Z" fill="#fff5ca" opacity=".28" stroke="none"/>
+ <path d="M408 188 346 238l32 102h14Z" fill="#6e3b1d" opacity=".28" stroke="none"/>
+ <path d="M146 377h220" stroke="#fff0b3" stroke-width="7" stroke-linecap="round" opacity=".8"/>
+ <path d="M159 437h194" stroke="#fff0b3" stroke-width="4" stroke-linecap="round" opacity=".65"/>
+</g>
+<g stroke="#7a2854" stroke-width="6" filter="url(#shine)">
+ <path d="M213 91 222 117 213 143 204 117Z" fill="url(#pink)"/>
+ <path d="M299 91 308 117 299 143 290 117Z" fill="url(#pink)"/>
+ <path d="M83 170 94 193 83 216 72 193Z" fill="url(#pink)"/>
+ <path d="M429 170 440 193 429 216 418 193Z" fill="url(#pink)"/>
+ <path d="M256 211 271 238 256 265 241 238Z" fill="url(#pink)"/>
+ <ellipse cx="174" cy="286" rx="14" ry="19" fill="url(#pink)"/>
+ <ellipse cx="338" cy="286" rx="14" ry="19" fill="url(#pink)"/>
+ <ellipse cx="256" cy="382" rx="17" ry="21" fill="url(#pink)"/>
+</g>
+<g fill="none" stroke="#fff5d1" stroke-linecap="round" opacity=".8">
+ <path d="m105 177 56 42M214 106l29 84M298 106l-29 84M407 177l-56 42" stroke-width="7"/>
+ <path d="M153 369h205" stroke-width="4"/>
+</g>
+<g fill="#fff0bd"><circle cx="213" cy="91" r="5"/><circle cx="299" cy="91" r="5"/><circle cx="83" cy="170" r="5"/><circle cx="429" cy="170" r="5"/></g>
+</svg>
