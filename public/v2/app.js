@@ -128,6 +128,32 @@ function fillMining(m){
  $('cfg-base').value=m.daily_base_reward??0;$('cfg-referral').value=m.referral_daily_bonus??0;$('cfg-max-referrals').value=m.max_rewarded_referrals??0;$('cfg-speed').value=m.max_speed_multiplier??1;$('cfg-user-cap').value=m.per_user_daily_cap??0;$('cfg-global-cap').value=m.global_daily_budget??0;
  $('earn-status').textContent=m.mining_enabled?'Flag enabled · reward engine pending':'Disabled';
 }
+function formatEmpc(value){
+ const n=Number(value||0);
+ return (Number.isFinite(n)?n.toLocaleString(undefined,{maximumFractionDigits:3}):'0')+' EMPC';
+}
+function renderEconomy(data){
+ const allocations=$('allocation-list');allocations.replaceChildren();
+ (data.token_allocations||[]).forEach(item=>{
+  const row=document.createElement('div');row.className='detail-row';
+  const label=document.createElement('span');label.textContent=item.name+' · '+Number(item.percent).toLocaleString()+'%';
+  const amount=document.createElement('strong');amount.textContent=formatEmpc(item.amount);
+  row.append(label,amount);allocations.append(row);
+ });
+ const totals=data.mining_totals||{};
+ $('mining-allocated').textContent=formatEmpc(totals.allocated);
+ $('mining-released').textContent=formatEmpc(totals.released);
+ $('mining-claims').textContent=Number(totals.claims||0).toLocaleString();
+ const epochs=$('mining-epoch-list');epochs.replaceChildren();
+ (data.mining_epochs||[]).forEach(item=>{
+  const row=document.createElement('div');row.className='detail-row';
+  const label=document.createElement('span');
+  label.textContent='Year '+item.epoch+' · '+item.starts_on+' to '+item.ends_on;
+  const amount=document.createElement('strong');
+  amount.textContent=formatEmpc(item.annual_budget)+' / year · '+formatEmpc(item.daily_budget)+' / day';
+  row.append(label,amount);epochs.append(row);
+ });
+}
 function renderAdmins(list,actor){
  const box=$('admin-list');box.replaceChildren();
  (list||[]).forEach(a=>{
@@ -145,7 +171,7 @@ async function loadAdmin(){
  try{
   const data=await adminApi('dashboard');adminData=data;$('admin-loading').classList.add('hidden');$('admin-content').classList.remove('hidden');$('admin-nav').classList.remove('hidden');
   $('admin-role').textContent=(data.admin?.role||'ADMIN').toUpperCase();$('admin-id').textContent='Telegram ID: '+data.admin.telegram_user_id;
-  fillMining(data.mining||{});renderAdmins(data.admins||[],telegramUser.id);
+  fillMining(data.mining||{});renderEconomy(data);renderAdmins(data.admins||[],telegramUser.id);
   $('admin-management').classList.toggle('hidden',!data.admin.can_manage_admins);
  }catch(e){$('admin-loading').classList.add('hidden');$('admin-nav').classList.add('hidden');$('admin-content').classList.add('hidden')}
 }
