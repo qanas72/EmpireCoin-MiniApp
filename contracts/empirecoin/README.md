@@ -42,20 +42,24 @@ The initial mint is a separate transaction. Admin removal is also separate and i
 
 Acton recommends at least 1 TON available for public-network deployment. The deploy script sends 0.05 TON as the contract deployment message value; actual network fees are additional and may vary.
 
-## Allocation plan
+## Approved token allocation (November 2026)
 
-| Allocation | EMPC |
-|---|---:|
-| Treasury | 200,000,000 |
-| Free user earnings | 150,000,000 |
-| Referrals | 100,000,000 |
-| Tasks and advertising rewards | 150,000,000 |
-| Token sale | 200,000,000 |
-| Liquidity | 100,000,000 |
-| Long-term reserve | 100,000,000 |
-| **Total** | **1,000,000,000** |
+The owner-approved mixed allocation replaces all earlier draft allocation tables:
 
-The allocation table is the approved plan; it does not automatically distribute tokens. The initial mint goes to the treasury wallet. Separate destination wallets and transfers must be confirmed before allocations are distributed.
+| Allocation | Share | EMPC |
+|---|---:|---:|
+| User rewards and mining | 40% | 400,000,000 |
+| Treasury and ecosystem development | 15% | 150,000,000 |
+| DEX liquidity | 15% | 150,000,000 |
+| Team and technical development | 10% | 100,000,000 |
+| Marketing and community growth | 8% | 80,000,000 |
+| Commercial partnerships | 7% | 70,000,000 |
+| Security and emergency reserve | 5% | 50,000,000 |
+| **Total** | **100%** | **1,000,000,000** |
+
+The 400,000,000 EMPC user-reward allocation is subdivided in the approved economic plan into 240,000,000 mining, 60,000,000 tasks, 40,000,000 referrals, 30,000,000 campaigns/events, 20,000,000 community/content activity, and 10,000,000 special-reward reserve. Mining uses a dynamic, server-calculated reward model with a five-year budget plan; unclaimed 24-hour cycles do not accrue.
+
+Allocation is not the same as immediate release or distribution. The initial mint destination, vesting/lock contracts, allocation wallet addresses, and transfers must be separately reviewed and confirmed before any on-chain distribution. Earlier 700,000,000 EMPC treasury-balance proposals and the previous draft allocation table are superseded for this independent token project.
 
 ## Safety
 
