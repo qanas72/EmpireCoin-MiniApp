@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#160d18"><meta name="description" content="EmpireCoin Nova — the next chapter of the EmpireCoin ecosystem">
+<title>EmpireCoin Nova · Mini App</title>
+<link rel="manifest" href="./site.webmanifest"><link rel="stylesheet" href="./styles.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<div class="ambient a1"></div><div class="ambient a2"></div>
+<div class="shell">
+<header class="topbar"><a class="brand" href="#home"><span class="crest">♛</span><span>EMPIRE<span class="pink">COIN</span><small>N O V A&nbsp; · &nbsp;D I G I T A L&nbsp; E C O N O M Y</small></span></a><div class="head-right"><span class="network-pill"><i></i><span id="network-label">TESTNET</span></span><button class="avatar" id="profile-short">EC</button></div></header>
+<main>
+<section class="view active" id="view-home">
+<div class="welcome"><p class="eyebrow">THE NEXT ERA STARTS HERE</p><h1>Own your <em>future.</em></h1><p class="sub">A new universe of rewards, missions and digital ownership.</p></div>
+<article class="balance-card"><div class="card-orbit"></div><div class="card-top"><span>YOUR EMPC PORTFOLIO</span><span class="chip">PREVIEW</span></div><div class="big-balance">— <small>EMPC</small></div><div class="balance-foot"><span>Reward ledger not connected</span><span class="spark">✧</span></div><div class="card-rule"></div><div class="wallet-line"><div class="wallet-glyph">◇</div><div><small>CONNECTED WALLET</small><b id="wallet-short">Not connected</b></div><button class="mini-link" data-page="wallet">Manage ↗</button></div></article>
+<div class="section-title"><div><p class="eyebrow">YOUR SPACE</p><h2>Explore Nova</h2></div><span class="live-tag">● SYSTEM PREVIEW</span></div>
+<div class="tile-grid">
+<button class="tile" data-page="mine"><span class="tile-icon">✧</span><b>Free Mining</b><small>Daily reward cycle</small></button>
+<button class="tile" data-page="referrals"><span class="tile-icon">♧</span><b>Referral Hub</b><small>Grow your circle</small></button>
+<button class="tile" data-page="tasks"><span class="tile-icon">▤</span><b>Mission Board</b><small>Tasks & campaigns</small></button>
+<button class="tile" data-page="withdraw"><span class="tile-icon">⇧</span><b>Withdraw</b><small>Eligibility & payout</small></button>
+</div>
+<div class="notice"><span>✦</span><div><b>Safe launch mode</b><p>Testnet and Mainnet interfaces are prepared. Rewards, deposits and withdrawals stay disabled until their on-chain and server checks are deployed.</p></div></div>
+</section>
+<section class="view" id="view-mine">
+<div class="page-head"><p class="eyebrow">DAILY REWARD PROTOCOL</p><h1>Free <em>Mining</em></h1><p class="sub">One claim window every 24 hours. A new cycle cannot begin until the previous reward is claimed.</p></div>
+<article class="mining-card"><div class="mine-orb">✧</div><span class="chip">ENGINE OFFLINE</span><div class="mine-amount">— <small>EMPC</small></div><p class="muted">Your daily reward will be calculated by the secure reward service.</p><div class="timer"><small>NEXT CLAIM WINDOW</small><b id="timer">-- : -- : --</b><span>24-hour server-controlled cycle</span></div><button class="primary" id="start-mine" disabled>Start Free Mining</button><p class="fine">Mining and claiming are not simulated in this preview. No tokens are created by opening this page.</p></article>
+<div class="info-row"><span>Last claim</span><b>Not available</b></div><div class="info-row"><span>Unclaimed reward</span><b>— EMPC</b></div><div class="info-row"><span>Next cycle</span><b>After successful claim</b></div>
+</section>
+<section class="view" id="view-referrals">
+<div class="page-head"><p class="eyebrow">COMMUNITY GROWTH</p><h1>Referral <em>Hub</em></h1><p class="sub">Invite friends and follow verified referral activity.</p></div>
+<article class="feature-panel"><div class="feature-icon">♧</div><span class="chip">COMING SOON</span><h2>Your network. Your impact.</h2><p class="muted">Referral links, qualifying rules and rewards will be activated after anti-fraud checks are deployed.</p><button class="secondary" disabled>Generate invite link</button></article>
+<div class="stats"><div><small>INVITED</small><b>—</b></div><div><small>QUALIFIED</small><b>—</b></div><div><small>REWARDS</small><b>— EMPC</b></div></div>
+</section>
+<section class="view" id="view-tasks">
+<div class="page-head"><p class="eyebrow">QUESTS & CAMPAIGNS</p><h1>Mission <em>Board</em></h1><p class="sub">Complete genuine activities. Rewards are credited only after server verification.</p></div>
+<article class="feature-panel"><div class="feature-icon">▤</div><span class="chip">NO ACTIVE TASKS</span><h2>New missions are being prepared</h2><p class="muted">Each task will show its instructions, deadline, proof requirements and reward before you start.</p></article>
+</section>
+<section class="view" id="view-wallet">
+<div class="page-head"><p class="eyebrow">TON CONNECT</p><h1>Your <em>Wallet</em></h1><p class="sub">Connect a wallet on the selected network. Never share your recovery phrase.</p></div>
+<article class="panel"><div class="panel-head"><span>NETWORK</span><span class="chip" id="network-chip">TESTNET</span></div><div class="network-switch"><button class="network-choice selected" data-network="-3">TON Testnet</button><button class="network-choice" data-network="-239">TON Mainnet</button></div><div id="ton-connect"></div><div class="wallet-status" id="wallet-status">Connect a TON wallet to view its address.</div><div class="info-row"><span>Wallet address</span><b id="wallet-address">Not connected</b></div><div class="info-row"><span>Ownership verification</span><b>Not activated</b></div><div class="notice compact"><span>!</span><div><b>Verification payment not active</b><p>The proposed 0.1 TON verification charge will not be collected until a verified payment flow and refund/support policy are deployed.</p></div></div></article>
+</section>
+<section class="view" id="view-withdraw">
+<div class="page-head"><p class="eyebrow">TOKEN PAYOUTS</p><h1>Withdraw <em>EMPC</em></h1><p class="sub">Review eligibility before requesting a payout to your personal TON wallet.</p></div>
+<article class="panel"><span class="chip">WITHDRAWALS DISABLED</span><div class="requirement"><span>Personal wallet holding requirement</span><b>4,500 EMPC</b><small>Must be held for 5 consecutive days; on-chain proof required.</small></div><div class="requirement"><span>Minimum withdrawal</span><b>10,000 EMPC</b><small>Available balance and network fees will be checked.</small></div><button class="primary" disabled>Request withdrawal</button><p class="fine">The holding rule and minimum are proposed settings. Withdrawal opens only after token contract, ownership tracking, treasury liquidity and security checks are complete.</p></article>
+</section>
+<section class="view" id="view-profile">
+<div class="page-head"><p class="eyebrow">YOUR ACCOUNT</p><h1>Member <em>Profile</em></h1></div><article class="panel profile"><div class="profile-mark">EC</div><div><h2 id="profile-name">Telegram member</h2><p id="profile-user" class="muted">Open from the official bot</p></div></article><div class="info-row"><span>Telegram session</span><b id="session-state">Not verified</b></div><div class="info-row"><span>Wallet</span><b id="profile-wallet">Not connected</b></div><div class="info-row"><span>Membership</span><b>EmpireCoin member</b></div></section>
+<section class="view" id="view-admin">
+<div class="page-head"><p class="eyebrow">RESTRICTED AREA</p><h1>Admin <em>Control</em></h1><p class="sub">Admin permissions must be verified by the backend, never by a browser-only flag.</p></div><article class="panel"><span class="chip">ACCESS CHECK REQUIRED</span><h2>Management console</h2><p class="muted" id="admin-status">Administrator access has not been verified. All controls are locked.</p><div class="info-row"><span>Mining engine</span><b>Locked</b></div><div class="info-row"><span>Referral rules</span><b>Locked</b></div><div class="info-row"><span>Task campaigns</span><b>Locked</b></div><div class="info-row"><span>Token price settings</span><b>Locked</b></div><div class="info-row"><span>Withdrawal queue</span><b>Locked</b></div><p class="fine">The admin panel will be connected to server-side role checks and an audit log before it can change settings or approve payments.</p></article>
+</section>
+<div id="toast" class="toast hidden"></div>
+</main>
+<nav class="bottom-nav"><button class="nav active" data-view="home"><span>⌂</span><small>Home</small></button><button class="nav" data-view="mine"><span>✧</span><small>Mining</small></button><button class="nav" data-view="referrals"><span>♧</span><small>Invite</small></button><button class="nav" data-view="tasks"><span>▤</span><small>Tasks</small></button><button class="nav" data-view="wallet"><span>◇</span><small>Wallet</small></button><button class="nav" data-view="profile"><span>◉</span><small>Profile</small></button></nav>
+</div>
+<script type="module" src="./app.js"></script>
+</body></html>
