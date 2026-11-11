@@ -61,6 +61,10 @@ The 400,000,000 EMPC user-reward allocation is subdivided in the approved econom
 
 Allocation is not the same as immediate release or distribution. The initial mint destination, vesting/lock contracts, allocation wallet addresses, and transfers must be separately reviewed and confirmed before any on-chain distribution. Earlier 700,000,000 EMPC treasury-balance proposals and the previous draft allocation table are superseded for this independent token project.
 
+## Economy implementation status
+
+See [ECONOMY-IMPLEMENTATION.md](./ECONOMY-IMPLEMENTATION.md) for the approved allocation, dynamic mining design, backend foundation, and remaining launch gates.
+
 ## Safety
 
 - Never place seed phrases, private keys, bot tokens, or API secrets in the repository.
