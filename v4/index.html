@@ -7,6 +7,17 @@
 <meta name="description" content="EmpireCoin Nova — TON-powered digital economy." />
 <title>EmpireCoin Nova</title>
 <link rel="icon" type="image/svg+xml" href="../v3/crown.svg" />
+<script>
+  window.setTimeout(() => {
+    const root = document.getElementById('nova-root')
+    if (!root || root.dataset.reactMounted === 'true') return
+    if (root.dataset.scriptLoaded !== 'true') {
+      root.innerHTML = '<p class="boot">Nova could not load its application files. Refresh the page and send this message to support.</p>'
+    } else if (root.querySelector('.boot')) {
+      root.innerHTML = '<p class="boot">Nova loaded its files but could not start React. Please send a screenshot to support.</p>'
+    }
+  }, 12000)
+</script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
