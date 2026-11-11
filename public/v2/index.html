@@ -97,14 +97,9 @@
         </div>
         <div class="admin-section"><div class="section-heading"><div><p class="eyebrow">REWARD ENGINE</p><h2>Mining settings</h2></div></div>
           <div class="detail-list admin-settings">
-            <label class="setting-row"><span>Daily base reward (EMPC)</span><input id="cfg-base" type="number" min="0" step="0.1"></label>
-            <label class="setting-row"><span>Referral daily bonus</span><input id="cfg-referral" type="number" min="0" step="0.1"></label>
-            <label class="setting-row"><span>Maximum rewarded referrals</span><input id="cfg-max-referrals" type="number" min="0" step="1"></label>
-            <label class="setting-row"><span>Maximum speed multiplier</span><input id="cfg-speed" type="number" min="1" step="0.1"></label>
-            <label class="setting-row"><span>Per-user daily cap</span><input id="cfg-user-cap" type="number" min="0" step="0.1"></label>
-            <label class="setting-row"><span>Global daily budget</span><input id="cfg-global-cap" type="number" min="0" step="1"></label>
+            <label class="setting-row"><span>Maximum reward per user per 24-hour cycle (EMPC)</span><input id="cfg-user-cap" type="number" min="0.001" max="1000" step="0.1"></label>
           </div>
-          <p class="small-note">Saving configuration does not activate mining or distribute rewards. Those switches remain server-controlled and off until the reward engine is ready.</p>
+          <p class="small-note">The daily pool is calculated dynamically from the approved five-year schedule and verified activity weights. Mining and referral activation are locked until all launch checks pass.</p>
           <button id="save-settings" class="wide-button">Save reward settings</button>
         </div>
         <div class="admin-section" id="admin-management">
