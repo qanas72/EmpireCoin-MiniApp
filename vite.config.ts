@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // Resolve built assets relative to the Mini App URL. This avoids
-  // absolute-path issues in Telegram's embedded Android webview.
-  base: './',
+  // GitHub Pages serves this project below /EmpireCoin-MiniApp/.
+  // An explicit base keeps module and CSS asset URLs stable in Telegram WebView.
+  base: '/EmpireCoin-MiniApp/',
   build: {
     rollupOptions: {
       input: {
