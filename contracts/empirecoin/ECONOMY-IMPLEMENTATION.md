@@ -64,6 +64,9 @@ Supabase private-schema tables created:
 - `empc_mining_daily_pools`
 - `empc_mining_user_snapshots`
 - `empc_mining_claims`
+- `empc_reward_suballocations` (mining/tasks/referrals/campaigns/community/special reward caps)
+- `empc_tasks` and `empc_task_submissions`
+- `empc_referrals` and `empc_referral_rewards`
 
 The EMPC ledger is append-only. Corrections must be recorded as reversing/new entries, never by editing historical ledger rows.
 
