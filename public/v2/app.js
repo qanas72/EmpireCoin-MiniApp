@@ -24,6 +24,20 @@ async function postFunction(name,body){
 }
 async function walletApi(action,extra={}){if(!initData)throw new Error('Open the Mini App from @EmpireCoinOfficialBot.');return postFunction('ton-wallet-auth',{action,initData,network:selectedNetwork,...extra})}
 async function adminApi(action,payload={}){if(!initData)throw new Error('Telegram session unavailable.');return postFunction('admin-api',{action,initData,payload})}
+async function loadMiningStatus(){
+ try{
+  const result=await postFunction('empc-mining',{action:'status',initData});
+  const mining=result.mining||{};
+  const balance=Number(mining.balance||0);
+  $('earn-status').textContent=mining.enabled?'Engine enabled':'Disabled · launch pending';
+  $('earn-daily').textContent=mining.enabled?(mining.previous_cycle_ready?'Cycle prepared':'Awaiting verified activity'):'Not active';
+  $('earn-balance').textContent=(Number.isFinite(balance)?balance.toLocaleString(undefined,{maximumFractionDigits:4}):'0')+' EMPC';
+ }catch(e){
+  $('earn-status').textContent='Status unavailable';
+  $('earn-daily').textContent='Not available';
+  $('earn-balance').textContent='—';
+ }
+}
 
 async function startTelegram(){
  const webApp=window.Telegram?.WebApp;
@@ -163,6 +177,6 @@ window.addEventListener('unhandledrejection',e=>showError('Startup error: '+(e.r
 async function initialize(){
  const ok=await startTelegram();
  if(!ok)return;
- await Promise.all([startWallet(),loadAdmin()]);
+ await Promise.all([startWallet(),loadAdmin(),loadMiningStatus()]);
 }
 initialize();
