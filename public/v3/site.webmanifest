@@ -4,5 +4,6 @@
   "start_url": "./",
   "display": "standalone",
   "background_color": "#100b14",
-  "theme_color": "#160d18"
+  "theme_color": "#160d18",
+  "icons": [{"src":"./crown.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
