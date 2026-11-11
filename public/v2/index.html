@@ -86,6 +86,15 @@
       <div id="admin-loading" class="muted">Checking administrator permissions…</div>
       <div id="admin-content" class="hidden">
         <article class="admin-banner"><span class="pill success" id="admin-role">ADMIN</span><h2>Control centre</h2><p id="admin-id" class="muted"></p></article>
+        <div class="admin-section">
+          <div class="section-heading"><div><p class="eyebrow">TOKENOMICS</p><h2>Approved EMPC allocation</h2></div></div>
+          <div id="allocation-list" class="detail-list"></div>
+          <div class="detail-list"><div class="detail-row"><span>Mining allocation</span><strong id="mining-allocated">240,000,000 EMPC</strong></div><div class="detail-row"><span>Mining released</span><strong id="mining-released">0 EMPC</strong></div><div class="detail-row"><span>Recorded claims</span><strong id="mining-claims">0</strong></div></div>
+        </div>
+        <div class="admin-section">
+          <div class="section-heading"><div><p class="eyebrow">FIVE-YEAR SCHEDULE</p><h2>Mining budget epochs</h2></div></div>
+          <div id="mining-epoch-list" class="detail-list"></div>
+        </div>
         <div class="admin-section"><div class="section-heading"><div><p class="eyebrow">REWARD ENGINE</p><h2>Mining settings</h2></div></div>
           <div class="detail-list admin-settings">
             <label class="setting-row"><span>Daily base reward (EMPC)</span><input id="cfg-base" type="number" min="0" step="0.1"></label>
