@@ -8,20 +8,39 @@
 <title>EmpireCoin Nova</title>
 <link rel="icon" type="image/svg+xml" href="../v3/crown.svg" />
 <script>
-  window.setTimeout(() => {
-    const root = document.getElementById('nova-root')
-    if (!root || root.dataset.reactMounted === 'true') return
-    if (root.dataset.scriptLoaded !== 'true') {
-      root.innerHTML = '<p class="boot">Nova could not load its application files. Refresh the page and send this message to support.</p>'
-    } else if (root.querySelector('.boot')) {
-      root.innerHTML = '<p class="boot">Nova loaded its files but could not start React. Please send a screenshot to support.</p>'
+  (function () {
+    function report(message) {
+      var root = document.getElementById('nova-root');
+      if (!root || root.dataset.reactMounted === 'true') return;
+      root.innerHTML = '<p class="boot" style="overflow-wrap:anywhere;padding:24px">' + message + '</p>';
     }
-  }, 12000)
+    window.addEventListener('error', function (event) {
+      var target = event.target;
+      if (target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK')) {
+        report('Nova file loading error: ' + (target.src || target.href || target.tagName) + '. Please send this screenshot to support.');
+      } else if (event.message) {
+        report('Nova JavaScript error: ' + event.message + (event.filename ? ' (' + event.filename + ':' + event.lineno + ')' : ''));
+      }
+    }, true);
+    window.addEventListener('unhandledrejection', function (event) {
+      var reason = event.reason;
+      report('Nova startup rejection: ' + String(reason && (reason.message || reason)));
+    });
+    window.setTimeout(function () {
+      var root = document.getElementById('nova-root');
+      if (!root || root.dataset.reactMounted === 'true') return;
+      if (root.dataset.scriptLoaded !== 'true') {
+        report('Nova entry module did not start. Check the required JavaScript bundle and module-preload file. Send this screenshot to support.');
+      } else if (root.querySelector('.boot')) {
+        report('Nova loaded its files but could not start React. Please send this screenshot to support.');
+      }
+    }, 12000);
+  })();
 </script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-<div id="nova-root"><p class="boot">EmpireCoin Nova is loading… (build 2026.11.11.3)</p></div>
-<script type="module" src="../src/nova-main.tsx" onerror="var r=document.getElementById('nova-root');if(r)r.innerHTML='<p class=boot>Nova could not download its JavaScript app bundle. Please reopen this versioned link and send a screenshot.</p>'"></script>
+<div id="nova-root"><p class="boot">EmpireCoin Nova is loading… (build 2026.11.11.4)</p></div>
+<script type="module" src="../src/nova-main.tsx"></script>
 </body>
 </html>
