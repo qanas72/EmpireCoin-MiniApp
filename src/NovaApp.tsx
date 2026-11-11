@@ -19,6 +19,10 @@ export default function NovaApp() {
     tg?.expand?.()
   }, [])
 
+  useEffect(() => {
+    if (restored && !wallet) tonConnectUI.setConnectionNetwork(network)
+  }, [restored, wallet, network, tonConnectUI])
+
   const chooseNetwork = (next: Network) => {
     if (wallet) {
       setPage('wallet')
