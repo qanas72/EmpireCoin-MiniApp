@@ -1,3 +1,8 @@
+import { Buffer } from 'buffer'
+
+// TON libraries expect the Node.js Buffer global, which browser WebViews do not provide.
+;(globalThis as typeof globalThis & { Buffer: typeof Buffer }).Buffer = Buffer
+
 import React, { Component, type ErrorInfo, type ReactNode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
