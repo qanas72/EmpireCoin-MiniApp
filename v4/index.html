@@ -21,7 +21,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-<div id="nova-root"><p class="boot">EmpireCoin Nova is loading…</p></div>
-<script type="module" src="../src/nova-main.tsx"></script>
+<div id="nova-root"><p class="boot">EmpireCoin Nova is loading… (build 2026.11.11.2)</p></div>
+<script type="module" src="../src/nova-main.tsx" onerror="var r=document.getElementById('nova-root');if(r)r.innerHTML='<p class=boot>Nova could not download its JavaScript app bundle. Please reopen this versioned link and send a screenshot.</p>'"></script>
 </body>
 </html>
