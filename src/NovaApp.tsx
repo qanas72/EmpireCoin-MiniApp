@@ -13,6 +13,11 @@ const sameTonAddress = (left?: string | null, right?: string | null) => {
 }
 
 export default function NovaApp() {
+  useEffect(() => {
+    const root = document.getElementById('nova-root')
+    if (root) root.dataset.reactMounted = 'true'
+  }, [])
+
   const [network, setNetwork] = useState<Network>('-3')
   const [page, setPage] = useState<Page>('wallet')
   const [tonConnectUI] = useTonConnectUI()
