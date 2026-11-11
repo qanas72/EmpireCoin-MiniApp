@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react'
+import { Address } from '@ton/core'
 import { TonConnectButton, useIsConnectionRestored, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 
 type Network = '-3' | '-239'
 type Page = 'home' | 'wallet' | 'mining' | 'invite' | 'tasks' | 'profile'
 
 const short = (value: string) => value.length > 15 ? value.slice(0, 7) + '…' + value.slice(-6) : value
+const sameTonAddress = (left?: string | null, right?: string | null) => {
+  if (!left || !right) return false
+  try { return Address.parse(left).toRawString() === Address.parse(right).toRawString() }
+  catch { return left === right }
+}
 
 export default function NovaApp() {
   const [network, setNetwork] = useState<Network>('-3')
@@ -90,7 +96,7 @@ export default function NovaApp() {
         try {
           const status = await backendRequest('ton-wallet-auth', { action: 'status', network: wallet.account.chain })
           if (cancelled) return
-          if (status.wallet?.verified && status.wallet.wallet_address === wallet.account.address) {
+          if (status.wallet?.verified && sameTonAddress(status.wallet.wallet_address, wallet.account.address)) {
             setVerifiedWallet(status.wallet)
             setProofState('verified')
             setProofMessage('This wallet is already verified for your Telegram account.')
@@ -143,7 +149,7 @@ export default function NovaApp() {
 
   const walletNetwork = wallet?.account.chain === '-3' ? 'TON Testnet' : wallet?.account.chain === '-239' ? 'TON Mainnet' : 'Unknown network'
   const networkMatches = wallet ? wallet.account.chain === network : false
-  const walletVerified = !!wallet && proofState === 'verified' && verifiedWallet?.wallet_address === wallet.account.address
+  const walletVerified = !!wallet && proofState === 'verified' && sameTonAddress(verifiedWallet?.wallet_address, wallet?.account.address)
 
   return (
     <div className="nova-shell">
