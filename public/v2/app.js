@@ -125,8 +125,8 @@ async function startWallet(){
 }
 
 function fillMining(m){
- $('cfg-base').value=m.daily_base_reward??0;$('cfg-referral').value=m.referral_daily_bonus??0;$('cfg-max-referrals').value=m.max_rewarded_referrals??0;$('cfg-speed').value=m.max_speed_multiplier??1;$('cfg-user-cap').value=m.per_user_daily_cap??0;$('cfg-global-cap').value=m.global_daily_budget??0;
- $('earn-status').textContent=m.mining_enabled?'Flag enabled · reward engine pending':'Disabled';
+ $('cfg-user-cap').value=m.per_user_daily_cap??6;
+ $('earn-status').textContent=m.mining_enabled?'Engine enabled':'Disabled · launch pending';
 }
 function formatEmpc(value){
  const n=Number(value||0);
@@ -176,10 +176,12 @@ async function loadAdmin(){
  }catch(e){$('admin-loading').classList.add('hidden');$('admin-nav').classList.add('hidden');$('admin-content').classList.add('hidden')}
 }
 async function saveMining(){
- const payload={daily_base_reward:Number($('cfg-base').value),referral_daily_bonus:Number($('cfg-referral').value),max_rewarded_referrals:Number($('cfg-max-referrals').value),max_speed_multiplier:Number($('cfg-speed').value),per_user_daily_cap:Number($('cfg-user-cap').value),global_daily_budget:Number($('cfg-global-cap').value),mining_enabled:false,referrals_enabled:false};
- if(Object.values(payload).some(v=>typeof v==='number'&&(!Number.isFinite(v)||v<0))||payload.max_speed_multiplier<1){toast('Check the settings values.');return}
- try{const result=await adminApi('update_mining',payload);fillMining(result.mining);toast('Reward settings saved. Mining and referrals remain disabled.')}
- catch(e){showError('Admin settings: '+e.message)}
+ const cap=Number($('cfg-user-cap').value);
+ if(!Number.isFinite(cap)||cap<=0||cap>1000){toast('Enter a per-user cap between 0.001 and 1,000 EMPC.');return}
+ try{
+  const result=await adminApi('update_mining',{per_user_daily_cap:cap,mining_enabled:false,referrals_enabled:false});
+  fillMining(result.mining);toast('Dynamic mining cap saved. Mining remains locked until launch approval.');
+ }catch(e){showError('Admin settings: '+e.message)}
 }
 async function addAdmin(){
  const id=Number($('new-admin-id').value);if(!Number.isSafeInteger(id)||id<=0){toast('Enter a valid Telegram ID.');return}
