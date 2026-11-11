@@ -6,4 +6,12 @@ export default defineConfig({
   // Resolve built assets relative to the Mini App URL. This avoids
   // absolute-path issues in Telegram's embedded Android webview.
   base: './',
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        nova: 'v4/index.html',
+      },
+    },
+  },
 })
