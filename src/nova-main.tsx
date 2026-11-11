@@ -8,7 +8,7 @@ const root = document.getElementById('nova-root')
 if (root) {
   ReactDOM.createRoot(root).render(
     <React.StrictMode>
-      <TonConnectUIProvider manifestUrl="https://qanas72.github.io/EmpireCoin-MiniApp/v4/tonconnect-manifest.json">
+      <TonConnectUIProvider manifestUrl="https://qanas72.github.io/EmpireCoin-MiniApp/tonconnect-manifest-v2.json">
         <NovaApp />
       </TonConnectUIProvider>
     </React.StrictMode>,
